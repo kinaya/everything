@@ -6,7 +6,7 @@ const app = express();
 
 // calling .get creates a route handler. Express calls the function
 app.get('/', (req, res) => {
-  res.send({hi: 'there'}); // Close request and send body
+  res.send({bye: 'buddy'}); // Close request and send body
 });
 
 const PORT = process.env.PORT || 5000;
