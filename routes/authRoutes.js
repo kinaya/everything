@@ -8,11 +8,17 @@ module.exports = (app) => {
   }))
 
   // This gets us up to passport.use second parameter function!
-  app.get('/auth/google/callback', passport.authenticate('google'))
+  app.get(
+    '/auth/google/callback', // Comes back from google
+    passport.authenticate('google'), // Passport does its thing and sets a cookie
+    (req, res) => { // Redirect user to /surveys
+      res.redirect('/surveys');
+    }
+  )
 
   app.get('/api/logout', (req, res) => {
     req.logout(); // passport does this!
-    res.send(req.user);
+    res.redirect('/');
   })
 
   // Get the current logged in user
