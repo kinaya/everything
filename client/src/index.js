@@ -8,6 +8,11 @@ import reduxThunk from 'redux-thunk';
 import App from './components/App';
 import reducers from './reducers';
 
+// Temp test code!
+import axios from 'axios';
+window.axios = axios;
+// With this you can write axios.post('/api/survey', survey) in the browser console!
+
 
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk))
 

@@ -8,6 +8,7 @@ const keys = require('./config/keys');
 // We just want the file to run. So we don't need
 //const passportConfig = require('./services/passport');
 require('./models/User');
+require('./models/Survey');
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
@@ -36,6 +37,7 @@ app.use(passport.session());
 // The order decides which is used!!!
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 
 if(process.env.NODE_ENV === 'production') {
   // express will serve production assets, like main.js
