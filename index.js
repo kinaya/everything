@@ -11,7 +11,7 @@ require('./models/User');
 require('./models/Survey');
 require('./services/passport');
 
-mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
 
 // Generate a running express app
 const app = express();
