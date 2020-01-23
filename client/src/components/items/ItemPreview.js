@@ -12,12 +12,11 @@ const ItemPreview = ({item, displayButtons, onDelete, history}) => {
 
       <div className="card-image">
         <img alt="A thing" src="autumn.jpg" />
-        <span class="card-title" style={{padding: '0.5em'}}>{item.title}</span>
+        <span className="card-title" style={{padding: '0.5em'}}>{item.title}</span>
       </div>
 
       <div className="card-content" style={{padding: '0.8em'}}>
         <p>{item.body}</p>
-        <p>Posted on: {new Date(item.datePosted).toLocaleDateString()}</p>
         <p><Link to={`/item/${item._id}`} >Se hela</Link></p>
 
         {displayButtons && (

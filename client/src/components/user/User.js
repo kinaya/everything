@@ -15,10 +15,10 @@ class User extends Component {
 
     return (
       <div>
-        <h3>Setting</h3>
+        <h3>Inställningar</h3>
         Namn, Plats, Profilbild
 
-        <h3>My items</h3>
+        <h3>Mina saker</h3>
         <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
           {userItems.map(item => { return (
             <ItemPreview key={item._id} item={item} onDelete={(id, history) => deleteItem(id, history)} displayButtons={user._id === item._user ? true : false} />

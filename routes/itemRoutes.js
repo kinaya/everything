@@ -28,13 +28,14 @@ module.exports = app => {
   // Create an item
   app.post('/api/items', requireLogin, async (req, res) => {
 
-    const {title, body } = req.body;
+    const {title, body, visibility } = req.body;
 
     const item = new Item({
       title,
       body,
       _user: req.user.id,
-      datePosted: Date.now()
+      datePosted: Date.now(),
+      visibility
     });
 
     // Är det här ok?

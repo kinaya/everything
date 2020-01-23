@@ -12,7 +12,7 @@ class ItemCreate extends Component {
   render() {
     return (
       <div>
-        <h2>Create an Item</h2>
+        <h2>Lägg till en sak</h2>
         <ItemForm onSubmit={this.onSubmit} submitText="Lägg till" submitIcon="add" />
       </div>
     )

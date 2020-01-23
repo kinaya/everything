@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
-//import { createLogger } from 'redux-logger';
+import { createLogger } from 'redux-logger';
 
 import App from './components/App';
 import reducers from './reducers';
@@ -14,9 +14,9 @@ import reducers from './reducers';
 //window.axios = axios;
 // With this you can write axios.post('/api/survey', survey) in the browser console!
 
-//const loggerMiddleware = createLogger();
-//const store = createStore(reducers, {}, applyMiddleware(reduxThunk,loggerMiddleware))
-const store = createStore(reducers, {}, applyMiddleware(reduxThunk))
+const loggerMiddleware = createLogger();
+const store = createStore(reducers, {}, applyMiddleware(reduxThunk,loggerMiddleware))
+//const store = createStore(reducers, {}, applyMiddleware(reduxThunk))
 
 ReactDOM.render(
   <Provider store={store}><App /></Provider>,

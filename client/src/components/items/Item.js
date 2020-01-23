@@ -16,6 +16,13 @@ class Item extends Component {
     return (
       <div>
         <h2>{item.title}</h2>
+        <p><i class="tiny material-icons">date_range</i>{new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric'})}</p>
+        <p><i class="tiny material-icons">visibility</i>
+          {item.visibility === 'hidden' && 'Lånas inte ut för tillfället' }
+          {item.visibility === 'friends' && 'Lånas ut till vänner' }
+          {item.visibility === 'all' && 'Lånas ut till alla' }
+        </p>
+        <p><i class="tiny material-icons">place</i>Kortedala</p>
         <p>{item.body}</p>
 
         {item._user === user._id && (

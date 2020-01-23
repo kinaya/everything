@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -12,6 +12,7 @@ import PrivateRoute from './PrivateRoute';
 import ItemList from './items/ItemList';
 import ItemEdit from './items/ItemEdit';
 import ItemCreate from  './items/ItemCreate';
+import Loading from './Loading';
 
 class App extends Component {
 
@@ -23,7 +24,7 @@ class App extends Component {
 
     if(this.props.loading) {
       return (
-        <div></div>
+        <Loading />
       )
     }
 
@@ -33,13 +34,15 @@ class App extends Component {
         <Header />
 
         <div className="container">
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/user/login" component={Login} />
-          <PrivateRoute exact path="/user" component={User} />
-          <PrivateRoute exact path="/items" component={ItemList} />
-          <PrivateRoute exact path="/item/new" component={ItemCreate} />
-          <PrivateRoute exact path="/item/:itemId" component={Item} />
-          <PrivateRoute exact path="/item/:itemId/edit" component={ItemEdit} />
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/user/login" component={Login} />
+            <PrivateRoute exact path="/user" component={User} />
+            <PrivateRoute exact path="/items" component={ItemList} />
+            <PrivateRoute exact path="/item/new" component={ItemCreate} />
+            <PrivateRoute exact path="/item/:itemId" component={Item} />
+            <PrivateRoute exact path="/item/:itemId/edit" component={ItemEdit} />
+          </Switch>
         </div>
 
       </BrowserRouter>

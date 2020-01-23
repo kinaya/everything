@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import { Link, withRouter } from 'react-router-dom';
-import ItemFormField from './ItemFormField';
-
-const formFields = [
-  {label: 'Items Title', name: 'title'},
-  {label: 'Items Description', name: 'body'}
-];
+import { RadioButton, TextField, TextArea } from './ItemFormField';
 
 class ItemForm extends Component {
 
@@ -18,9 +13,19 @@ class ItemForm extends Component {
     return (
       <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
 
-          {formFields.map(field => { return (
-            <Field key={field.name} label={field.label} type="text" name={field.name} component={ItemFormField} />
-          )})}
+            <Field label="Rubrik" type="text" name="title" component={TextField} />
+
+            <label>Beskrivning</label>
+            <div>
+              <Field name="body" type="textarea" component={TextArea} />
+            </div>
+
+            <label>Visa denna sak för</label>
+            <div>
+              <p><label><Field name="visibility" component={RadioButton} type="radio" value="all"/><span> Alla</span></label></p>
+              <p><label><Field name="visibility" component={RadioButton} type="radio" value="friends"/><span> Mina vänner</span></label></p>
+              <p><label><Field name="visibility" component={RadioButton} type="radio" value="hidden"/><span> Visa den inte just nu</span></label></p>
+            </div>
 
           <button className="waves-effect waves-light btn-small" type="submit"><i className="material-icons right">{this.props.submitIcon}</i>{this.props.submitText}</button>
           <Link style={{marginLeft: '1em'}} to="/items" className="deep-orange waves-effect waves-light btn-small"><i className="material-icons right">cancel</i>Avbryt</Link>
@@ -32,16 +37,19 @@ class ItemForm extends Component {
 function validate(values) {
   const errors = {};
 
-  formFields.forEach(({name}) => {
-    if(!values[name]) {
-      errors[name] = 'You must provide a value'
-    }
-  });
+  if(!values.title) {
+    errors.title = "Du måste ange en rubrik"
+  }
+
+  if(!values.body) {
+    errors.body = "Du måste ange en beskrivning"
+  }
 
   return errors;
 }
 
 export default reduxForm({
   validate,
-  form: 'itemForm'
+  form: 'itemForm',
+  initialValues: {visibility: 'all'}
 })(withRouter(ItemForm));
