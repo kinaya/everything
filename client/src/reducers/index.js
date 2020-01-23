@@ -1,10 +1,16 @@
 import { combineReducers } from 'redux'
 import authReducer from './authReducer'
-import surveysReducer from './surveysReducer'
+import itemsReducer from './itemsReducer'
+import userItemsReducer from './userItemsReducer'
+import itemReducer from './itemReducer'
+import loadingReducer from './loadingReducer'
 import { reducer as reduxForm} from 'redux-form'
 
 export default combineReducers({
-  auth: authReducer,
+  user: authReducer,
   form: reduxForm,
-  surveys: surveysReducer
+  items: itemsReducer,
+  userItems: userItemsReducer,
+  item: itemReducer,
+  loading: loadingReducer
 });

@@ -1,35 +1,48 @@
 import axios from 'axios';
-import { FETCH_USER, FETCH_SURVEYS } from './types';
+import { FETCH_USER, FETCH_ITEMS, FETCH_ITEM, UPDATE_LOADING, FETCH_USER_ITEMS } from './types';
 
-// fetchUser action creator - producers an action. The action is passed to the dispatch function. Redux thunk gives us direct action to the dispatch function
-// With redux thunk we return a function!
-/*export const fetchUser = () => {
-  return function(dispatch) {
-    axios.get('/api/current_user')
-      .then(res => dispatch({
-        type: FETCH_USER,
-        payload: res
-      }))
-  }
-}*/
-
+// Fetch the current user
 export const fetchUser = () => async dispatch => {
   const res = await axios.get('/api/current_user')
   dispatch({ type: FETCH_USER, payload: res.data })
+  dispatch({ type: UPDATE_LOADING, payload: false})
 }
 
-export const handleToken = (token) => async dispatch => {
-  const res = await axios.post('/api/stripe', token)
-  dispatch({ type: FETCH_USER, payload: res.data })
+// Create an item
+export const createItem = (formValues, history) => async dispatch => {
+  const res = await axios.post('/api/items', formValues);
+  dispatch({type: FETCH_ITEMS, payload: res.data}) // CREATE_ITEM??
+  history.push('/items');
 }
 
-export const submitSurvey = (values, history) => async dispatch => {
-  const res = await axios.post('/api/surveys', values);
-  history.push('/surveys');
-  dispatch({type: FETCH_USER, payload: res.data});
+// Fetch a list of all items
+export const fetchItems = () => async dispatch => {
+  const res = await axios.get('/api/items');
+  dispatch({type: FETCH_ITEMS, payload: res.data})
 }
 
-export const fetchSurveys = () => async dispatch => {
-  const res = await axios.get('/api/surveys');
-  dispatch({type: FETCH_SURVEYS, payload: res.data})
+// Fetch a list of a users items
+export const fetchUserItems = (userId) => async dispatch => {
+  const res = await axios.get(`/api/items/${userId}`)
+  dispatch({type: FETCH_USER_ITEMS, payload: res.data})
+}
+
+// Fetch a single item
+export const fetchItem = (itemId) => async dispatch => {
+  const res = await axios.get(`/api/item/${itemId}`);
+  dispatch({type: FETCH_ITEM, payload: res.data})
+}
+
+// Edit an item
+export const editItem = (itemId, formValues, history) => async dispatch => {
+  const res = await axios.put(`/api/item/${itemId}`, formValues)
+  dispatch({type: FETCH_ITEMS, payload: res.data})
+  history.push('/items');
+}
+
+// Delete an item
+export const deleteItem = (itemId, history) => async dispatch => {
+  const res = await axios.delete(`/api/item/${itemId}`);
+  dispatch({type: FETCH_ITEMS, payload: res.data})
+  history.push('/items');
 }

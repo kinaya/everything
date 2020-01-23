@@ -5,8 +5,13 @@ import * as actions from '../actions';
 
 import Header from './Header';
 import Landing from './Landing';
-import Dashboard from './Dashboard';
-import SurveyNew from './surveys/SurveyNew';
+import Item from './items/Item';
+import User from './user/User';
+import Login from './user/Login';
+import PrivateRoute from './PrivateRoute';
+import ItemList from './items/ItemList';
+import ItemEdit from './items/ItemEdit';
+import ItemCreate from  './items/ItemCreate';
 
 class App extends Component {
 
@@ -15,17 +20,42 @@ class App extends Component {
   }
 
   render() {
+
+    if(this.props.loading) {
+      return (
+        <div></div>
+      )
+    }
+
     return (
-        <BrowserRouter>
-          <div className="container">
-            <Header />
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/surveys" component={Dashboard} />
-            <Route path="/surveys/new" component={SurveyNew} />
-          </div>
-        </BrowserRouter>
+      <BrowserRouter>
+
+        <Header />
+
+        <div className="container">
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/user/login" component={Login} />
+          <PrivateRoute exact path="/user" component={User} />
+          <PrivateRoute exact path="/items" component={ItemList} />
+          <PrivateRoute exact path="/item/new" component={ItemCreate} />
+          <PrivateRoute exact path="/item/:itemId" component={Item} />
+          <PrivateRoute exact path="/item/:itemId/edit" component={ItemEdit} />
+        </div>
+
+      </BrowserRouter>
     );
+
   }
 };
 
-export default connect(null, actions)(App);
+function mapStateToProps(state) {
+  return { loading: state.loading };
+}
+
+export default connect(mapStateToProps, actions)(App);
+
+
+/*<PrivateRoute exact path="/item/:itemId/edit" component={ItemNew} />
+<PrivateRoute exact path="/user" component={User} />
+<PrivateRoute exact path="/items" component={Items} />
+<Route exact path="/streams/new" component={StreamCreate} />*/

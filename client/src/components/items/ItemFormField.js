@@ -1,7 +1,6 @@
 import React from 'react'
 
 export default ({input, label, meta}) => {
-  // We attach all the props.input on <input />
   return (
     <div>
       <label>{label}</label>

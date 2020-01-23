@@ -8,7 +8,6 @@ const keys = require('./config/keys');
 // We just want the file to run. So we don't need
 //const passportConfig = require('./services/passport');
 require('./models/User');
-require('./models/Survey');
 require('./models/Item');
 require('./services/passport');
 
@@ -37,8 +36,6 @@ app.use(passport.session());
 //The authRoutes file returns a function, we imediatly call that function with the app object
 // The order decides which is used!!!
 require('./routes/authRoutes')(app);
-require('./routes/billingRoutes')(app);
-require('./routes/surveyRoutes')(app);
 require('./routes/itemRoutes')(app);
 
 if(process.env.NODE_ENV === 'production') {

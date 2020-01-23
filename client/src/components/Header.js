@@ -1,25 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Payments from './Payments'
 
 class Header extends Component {
 
-  // Helper
-  renderContent() {
-    switch(this.props.auth) {
-      case null:
-        return;
+  renderMenu() {
+    switch(this.props.user) {
       case false:
         return (
           <li><a href="/auth/google">Login with Google</a></li>
         );
       default:
         return [
-          <li key="1"><Payments /></li>,
-          <li key="2" style={{margin: '0 10px'}}>
-            Credits: {this.props.auth.credits}
-          </li>,
+          <li key="1">{this.props.user._id}</li>,
+          <li key="2"><Link to={'/user'}>Mitt konto</Link></li>,
           <li key="3"><a href="/api/logout">Logout</a></li>
         ];
     }
@@ -30,14 +24,9 @@ class Header extends Component {
     return (
       <nav>
          <div className="nav-wrapper">
-           <Link
-            to={this.props.auth ? '/surveys' : '/'}
-            className="brand-logo left"
-            >
-            Emaily</Link>
-
-           <ul id="nav-mobile" className="right hide-on-med-and-down">
-              {this.renderContent()}
+           <Link to={this.props.user ? '/items' : '/'} className="brand-logo left" >theLot</Link>
+           <ul id="nav" className="right hide-on-med-and-down">
+              {this.renderMenu()}
            </ul>
          </div>
        </nav>
@@ -47,7 +36,7 @@ class Header extends Component {
 
 // Hans desctructoring of auth doesn't work!
 function mapStateToProps(state) {
-  return {auth: state.auth}
+  return {user: state.user}
 }
 
 export default connect(mapStateToProps)(Header);
