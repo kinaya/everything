@@ -1,0 +1,73 @@
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: #f8f8f8;
+  color: #333333;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1 0 auto;
+}
+
+/* ======================= item =========================== */
+.meta {
+  span {
+    border-left: 1px solid gray;
+    margin-left: 0.5em;
+    padding-left: 0.5em;
+  }
+}
+
+.itemBorrowForm {
+  margin: 4em 0 -4em 0;
+  background-color: #E3F2FD;
+  padding: 2em 0 3em 0;
+}
+
+/* ======================= items =========================== */
+.itemFilter {
+  margin: 2em 0;
+}
+
+/* ======================= item =========================== */
+.footer {
+  background-color: #ee6e73;
+  color: #ffffff;
+  padding: 2em 0;
+  margin-top: 4em;
+  flex-shrink: 0;
+}
+
+.file-preview {
+  max-width: 200px;
+  height: auto;
+}
+
+.image-large {
+  max-width: 200px;
+  height: auto;
+}
+
+/* ======================= user =========================== */
+.avatar {
+  border-radius: 50%;
+  width: 100px;
+  height: auto;
+}
+
+.userItems {
+  margin: 4em 0 -4em 0;
+  padding: 2em 0;
+  background-color: #E3F2FD;
+}
+
+.card.horizontal .card-image img {
+  max-width: 200px;
+}

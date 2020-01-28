@@ -17,7 +17,6 @@ passport.deserializeUser((id, done) => {
   })
 })
 
-
 // Create new instance of Google strategy with config
 passport.use(new GoogleStrategy({
     clientID: keys.googleClientID,
@@ -30,7 +29,7 @@ passport.use(new GoogleStrategy({
     if(existingUser) {
       return done(null, existingUser); // Tell passport that we are done by calling done(). no error by null
     } else {
-      const user = await new User({googleId: profile.id}).save() // Create a new user instance
+      const user = await new User({googleId: profile.id, email: profile.emails[0].value, name: profile.displayName, image: profile.photos[0].value}).save() // Create a new user instance
       done(null, user); // call done with no error
     }
   })

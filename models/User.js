@@ -3,7 +3,9 @@ const { Schema } = mongoose; // const Schema = mongoose.Schema
 
 const userSchema = new Schema({
   googleId: String,
-  credits: { type: Number, default: 0 }
+  email: {type: String, match: [/\S+@\S+\.\S+/]},
+  name: String,
+  image: String
 });
 
 mongoose.model('users', userSchema); // Create it if not exists

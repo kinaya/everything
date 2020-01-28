@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import  * as actions from '../../actions';
 import sortObjects from '../../utils/sortObjects';
 import NoResults from './NoResults';
+import Loading from './../Loading';
 
 class ItemList extends Component {
 
@@ -13,6 +14,11 @@ class ItemList extends Component {
   }
 
   displayResults(items, filter) {
+
+    if(!items) {
+      return <Loading />
+    }
+
     let filteredItems;
 
     // Search
@@ -20,14 +26,9 @@ class ItemList extends Component {
     if(filter && filter.search) {
       searchQuery = filter.search.toLowerCase()
     }
-    // Visibility
-    let displayHidden = 'hidden';
-    if(filter && filter.showHidden) {
-      displayHidden = 'displayHidden'
-    }
 
     filteredItems = items.filter(item => { return (
-      item.visibility !== displayHidden &&
+      item.visibility &&
       (
         item.title.toLowerCase().includes(searchQuery)
         || item.body.toLowerCase().includes(searchQuery)
@@ -41,8 +42,6 @@ class ItemList extends Component {
       const vars = filter.order.split('_');
       key = vars[0]
       order = vars[1]
-      console.log(key)
-      console.log(order)
     }
 
     if(filteredItems.length !== 0) { return (
@@ -66,7 +65,8 @@ class ItemList extends Component {
     }
 
     return (
-      <div>
+      <div className="items">
+        <div className="container">
 
         <ItemFilterForm />
 
@@ -74,6 +74,7 @@ class ItemList extends Component {
           {this.displayResults(items, filter)}
         </div>
 
+        </div>
       </div>
     );
   }

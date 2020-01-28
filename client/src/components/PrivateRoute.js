@@ -1,16 +1,32 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Route, Redirect } from 'react-router-dom'
+import { Route } from 'react-router-dom'
+import Unauthorized from './Unauthorized'
 
 
-// This doesn't work since auth always flashes 'false' for a short period before it's loaded from backend
-const PrivateRoute = ({component: Component, user, ...rest}) => (
+/*const PrivateRoute = ({component: Component, user, ...rest}) => (
   <Route {...rest} render={(props) => (
-    !user
-      ? <Redirect to={{pathname: '/user/login'}} />
-      : <Component {...props} />
+    user && user._id === props.match.params.userId
+      ? <Component {...props} />
+      : <Unauthorized />
   )} />
-)
+)*/
+
+// Jag kan inte jämföra användarId med itemId! Jag måste hämta item och _user._id på det...
+
+function PrivateRoute({component: Component, user, ...rest}) {
+  return (
+    <Route {...rest} render={
+      function(props){
+        return (
+        user && user._id === props.match.params.id
+          ? <Component {...props} />
+          : <Unauthorized />
+        )
+      }
+    } />
+  )
+}
 
 function mapStateToProps({user}) {
   return {user}

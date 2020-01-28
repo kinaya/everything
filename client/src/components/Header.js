@@ -12,10 +12,8 @@ class Header extends Component {
         );
       default:
         return [
-          <li key="1">{this.props.user._id}</li>,
-          <li><Link key="4" to="/item/new">Lägg till</Link></li>,
-          <li key="2"><Link to={'/user'}>Mitt konto</Link></li>,
-          <li key="3"><a href="/api/logout">Logout</a></li>
+          <li key="4"><Link to="/item/new">Lägg till</Link></li>,
+          <li key="2"><Link to={`/user/${this.props.user._id}`}>Mitt konto</Link></li>
         ];
     }
   }
@@ -26,7 +24,7 @@ class Header extends Component {
       <nav>
          <div className="nav-wrapper">
            <Link to={this.props.user ? '/items' : '/'} className="brand-logo left" >EveryThing</Link>
-           <ul id="nav" className="right hide-on-med-and-down">
+           <ul id="nav" className="right">
               {this.renderMenu()}
            </ul>
          </div>

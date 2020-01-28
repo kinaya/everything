@@ -2,43 +2,72 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom';
 import * as actions from '../../actions'
+import ItemBorrowForm from './ItemBorrowForm';
+import Loading from '../Loading';
 
 class Item extends Component {
 
   componentDidMount() {
-    this.props.fetchItem(this.props.match.params.itemId)
+    this.props.fetchItem(this.props.match.params.id)
+  }
+
+  componentWillUnmount() {
+    this.props.clearRouteState()
   }
 
   render() {
 
     const {item, user, deleteItem, history} = this.props;
 
-    return (
-      <div>
-        <h2>{item.title}</h2>
-        <p><i class="tiny material-icons">date_range</i>{new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric'})}</p>
-        <p><i class="tiny material-icons">visibility</i>
-          {item.visibility === 'hidden' && 'Lånas inte ut för tillfället' }
-          {item.visibility === 'friends' && 'Lånas ut till vänner' }
-          {item.visibility === 'all' && 'Lånas ut till alla' }
-        </p>
-        <p><i class="tiny material-icons">place</i>Kortedala</p>
-        <p>{item.body}</p>
+    if(!item) return ( <Loading /> )
 
-        {item._user === user._id && (
-          <div className="card-action">
-            <Link to={`/item/${item._id}/edit`}>Edit</Link>
-            <button onClick={() => deleteItem(item._id, history)} >Delete</button>
+    return (
+      <div className="item">
+        <div className="container">
+
+          <h2>{item.title}</h2>
+
+          <div className="visibility">
+            {!item.visibility && (
+              <div>Denna sak visas inte för tillfället</div>
+            )}
           </div>
-        )}
+
+          <div className="meta">
+            <Link to={`/user/${item._user._id}`}>{item._user.name}</Link>
+            <span>{new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', year: 'numeric'})}</span>
+          </div>
+
+          {item.image && (
+            <img className="image-large" src={item.image} alt="fkfnf" />
+          )}
+
+          <div className="body">
+            <p>{item.body}</p>
+          </div>
+
+          {item._user._id === user._id && (
+            <div>
+              <Link className="waves-effect waves-light btn-small" to={`/item/${item._id}/edit`}><i className="material-icons right">edit</i>Edit</Link>
+              <button style={{marginLeft: '1em'}} onClick={() => deleteItem(item._id, history)} className="deep-orange waves-effect waves-light btn-small"><i className="material-icons right">delete</i>Delete</button>
+            </div>
+          )}
+
+        </div>
+
+        <ItemBorrowForm name={item._user.name} />
 
       </div>
     )
   }
 };
 
-function mapStateToProps({item, user}) {
-  return {item, user};
+function mapStateToProps(state) {
+  return {item: state.routeState.item, user: state.user}
 }
+
+/*function mapStateToProps({item, user}) {
+  return {item, user};
+}*/
 
 export default connect(mapStateToProps, actions)(withRouter(Item));

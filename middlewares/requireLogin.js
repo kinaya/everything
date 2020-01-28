@@ -1,6 +1,9 @@
 module.exports = (req, res, next) => {
   if(!req.user) {
-    return res.status(401).send({error: 'You must log in!'})
+    var error = new Error('User is not logged in')
+    error.status = 401;
+    next(error)
+    //throw new Error(error)
   }
-  next(); // COntinue
+  next();
 };

@@ -4,21 +4,19 @@ import { withRouter } from 'react-router-dom';
 
 const ItemPreview = ({item, displayButtons, onDelete, history}) => {
 
-  // Todo: When editing the user gets redirected to /items even if they clicked edit from the /user page!
-  // Todo: Make whole card clickable!
-
   return (
-    <div className="card" style={{flexBasis: '32%'}}>
+    <div onClick={() => history.push(`/item/${item._id}`)} className="card" style={{flexBasis: '32%', cursor: 'pointer'}}>
 
       <div className="card-image">
-        <img alt="A thing" src="autumn.jpg" />
+        <img alt="A thing" src={item.image ? item.image : '/autumn.jpg'} />
         <span className="card-title" style={{padding: '0.5em'}}>{item.title}</span>
       </div>
 
       <div className="card-content" style={{padding: '0.8em'}}>
-        <p>{item.body}</p>
-        <p><Link to={`/item/${item._id}`} >Se hela</Link></p>
-
+        {!item.visibility && (
+          <div>Denna sak visas inte för tillfället</div>
+        )}
+        {item._user.name} | {new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', year: 'numeric'})}
         {displayButtons && (
           <div className="card-action" style={{padding: '1em 0 0 0'}}>
             <Link className="waves-effect waves-light btn-small" to={`/item/${item._id}/edit`}><i className="material-icons right">edit</i>Edit</Link>
