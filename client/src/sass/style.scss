@@ -36,6 +36,38 @@ body {
   margin: 2em 0;
 }
 
+.item-preview {
+  cursor: pointer;
+  flex-basis: 100%;
+  img {
+    height:100%;
+    object-fit: cover;
+  }
+  @media(min-width: 480px) {
+    flex-basis: 48%;
+    .card-image {
+      height: 150px;
+      background-color: #eceff1;
+    }
+  }
+  @media(min-width: 768px) {
+    flex-basis: 32%;
+    .card-image {
+      height: 150px;
+    }
+  }
+  @media(min-width: 1024px) {
+    flex-basis: 32%;
+    .card-image {
+      height: 200px;
+    }
+  }
+  h5 {
+    margin-top:0;
+  }
+
+}
+
 /* ======================= item =========================== */
 .footer {
   background-color: #ee6e73;
@@ -53,6 +85,41 @@ body {
 .image-large {
   max-width: 200px;
   height: auto;
+}
+
+#file {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+//  visibility: hidden;
+//  display: none;
+}
+.file-wrapper {
+  width: 200px;
+  height: 200px;
+  background-color: #eceff1;
+  border: 1px solid #cfd8dc;
+  position: relative;
+  margin-bottom: 2em;
+
+  label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.switch {
+  margin-bottom: 2em;
+}
+
+.file-preview-wrapper i {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  cursor: pointer;
 }
 
 /* ======================= user =========================== */

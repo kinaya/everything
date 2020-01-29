@@ -38,8 +38,8 @@ class Item extends Component {
             <span>{new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', year: 'numeric'})}</span>
           </div>
 
-          {item.image && (
-            <img className="image-large" src={item.image} alt="fkfnf" />
+          {item._image && (
+            <img className="image-large" src={item._image.url} alt="fkfnf" />
           )}
 
           <div className="body">

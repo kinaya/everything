@@ -31,40 +31,4 @@ module.exports = (app) => {
     res.send(req.user); // passport does this!
   })
 
-  app.get('/api/signedRequest', (req, res) => {
-    const s3Bucket = process.env.S3_BUCKET
-    const s3 = new aws.S3();
-    const fileName = req.query['fileName'];
-    const fileType = req.query['fileType'];
-
-    const s3Params = {
-      Bucket: s3Bucket,
-      Key: fileName,
-      Expires: 60,
-      ContentType: fileType,
-      ACL: 'public-read'
-    }
-
-    console.log('s3Params',s3Params)
-
-    s3.getSignedUrl('putObject', s3Params, (err, data) => {
-      if(err){
-        console.log(err);
-        return res.end();
-      }
-
-      const returnData = {
-        signedRequest: data,
-        url: `https://${s3Bucket}.s3.amazonaws.com/${fileName}`
-      };
-
-      console.log('returnData', returnData)
-
-      res.write(JSON.stringify(returnData));
-      res.end();
-    });
-
-
-  })
-
 }

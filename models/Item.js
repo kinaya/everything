@@ -7,7 +7,7 @@ const itemSchema = new Schema({
   _user: {type: Schema.Types.ObjectId, ref: 'users'},
   datePosted: Date,
   visibility: Boolean,
-  image: String
+  _image: {type: Schema.Types.ObjectId, ref: 'images'}
 });
 
 mongoose.model('items', itemSchema);

@@ -46,7 +46,7 @@ class ItemList extends Component {
 
     if(filteredItems.length !== 0) { return (
       filteredItems.sort(sortObjects(key, order)).map(item => { return (
-        <ItemPreview key={item._id} item={item} onDelete={(id, history) => this.props.deleteItem(id, history)} displayButtons={this.props.user._id === item._user ? true : false} />
+        <ItemPreview key={item._id} item={item} onDelete={(id, history) => this.props.deleteItem(id, history)} displayButtons={this.props.user._id === item._user._id ? true : false} />
       )})
     )}
 

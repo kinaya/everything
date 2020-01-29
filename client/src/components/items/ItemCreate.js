@@ -9,16 +9,13 @@ class ItemCreate extends Component {
     return this.props.createItem(formValues, history)
   }
 
-  onImageChange = (formValues) => {
-    return this.props.getSignedRequest(formValues)
-  }
-
   render() {
+    console.log('huh')
     return (
       <div className="itemCreate">
         <div className="container">
           <h2>Lägg till en sak</h2>
-          <ItemForm initialValues={{visibility: true}} onImageChange={this.onImageChange} onSubmit={this.onSubmit} submitText="Lägg till" submitIcon="add" />
+          <ItemForm initialValues={{visibility: true}} imageState={false} onSubmit={this.onSubmit} submitText="Lägg till" submitIcon="add" />
         </div>
       </div>
     )

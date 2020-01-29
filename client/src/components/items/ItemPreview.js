@@ -5,14 +5,16 @@ import { withRouter } from 'react-router-dom';
 const ItemPreview = ({item, displayButtons, onDelete, history}) => {
 
   return (
-    <div onClick={() => history.push(`/item/${item._id}`)} className="card" style={{flexBasis: '32%', cursor: 'pointer'}}>
+    <div onClick={() => history.push(`/item/${item._id}`)} className="card item-preview">
 
       <div className="card-image">
-        <img alt="A thing" src={item.image ? item.image : '/autumn.jpg'} />
-        <span className="card-title" style={{padding: '0.5em'}}>{item.title}</span>
+        {item._image && (
+          <img alt="A thing" src={item._image.url} />
+        )}
       </div>
 
       <div className="card-content" style={{padding: '0.8em'}}>
+        <h5>{item.title}</h5>
         {!item.visibility && (
           <div>Denna sak visas inte för tillfället</div>
         )}

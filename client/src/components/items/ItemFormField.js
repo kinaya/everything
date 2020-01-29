@@ -59,16 +59,6 @@ export const DateTimePicker = ({ input, meta, ...rest}) => {
 
 // For images
 
-export const FilePreview = ({input, meta, ...rest}) => {
-  return (
-    <div>
-      {input.value && (
-        <img className="file-preview" src={input.value} alt="preview"/>
-      )}
-    </div>
-  )
-}
-
 const adaptFileEventToValue = delegate => e => delegate(e.target.files[0]);
 
 export const FileUpload = ({

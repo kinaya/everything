@@ -8,6 +8,7 @@ export default function (ComposedComponent) {
   class privateRoute extends React.Component {
 
     componentDidMount() {
+      console.log('this!!')
       this.props.fetchItem(this.props.match.params.id)
     }
 
@@ -28,9 +29,9 @@ export default function (ComposedComponent) {
     }
   }
 
-function mapStateToProps({user, item}) {
-  return {user, item}
-};
+function mapStateToProps(state) {
+  return { user: state.user, item: state.routeState.item}
+}
 
 return connect(mapStateToProps, actions)(privateRoute);
 }

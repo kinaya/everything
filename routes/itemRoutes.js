@@ -13,10 +13,15 @@ module.exports = app => {
   * Get all items
   */
   app.get('/api/items', requireLogin, async (req, res, next) => {
-    try {
-      const items = await Item.find().populate('_user', '_id, name');
-      res.status(201).send(items);
-    } catch (err) { next (err) }
+
+    Item.find()
+      .sort({'datePosted': -1})
+      .populate([{path:'_user', select:'_id name'}, {path:'_image'}])
+      .exec((err, items) => {
+        if(err) { next (err)}
+        res.status(201).send(items);
+      })
+
   })
 
   /*
@@ -35,10 +40,13 @@ module.exports = app => {
     }
 
     // Get items and respond
-    try {
-      const items = await Item.find({_user: req.params.userId}).populate('_user', '_id, name');
-      res.status(201).send(items)
-    } catch (err) { next (err) }
+    Item.find({_user: req.params.userId})
+      .sort({'datePosted': -1})
+      .populate([{path:'_user', select:'_id name'}, {path:'_image'}])
+      .exec((err, items) => {
+        if(err) { next (err)}
+        res.send(items);
+      })
 
   })
 
@@ -59,7 +67,7 @@ module.exports = app => {
 
     // Get item and respond
     try {
-      const item = await Item.findOne({_id: req.params.itemId}).populate('_user', '_id, name')
+      const item = await Item.findOne({_id: req.params.itemId}).populate('_user', '_id, name').populate('_image')
       res.send(item)
     } catch (err) { next(err) }
 
@@ -87,16 +95,15 @@ module.exports = app => {
     }
 
     // Create a new item instance
-    const {title, body, visibility, fileUrl } = req.body;
+    const {title, body, visibility, imageId } = req.body;
     const item = new Item({
       title,
       body,
       _user: req.user.id,
       datePosted: Date.now(),
       visibility,
-      image: fileUrl
+      _image: imageId
     });
-
     // Save new item and send the created item as response. Todo: why await?
     await item.save(function (err, item) {
       if(err) {next(err)}
@@ -122,7 +129,7 @@ module.exports = app => {
     }
 
     try {
-      const item = await Item.findOneAndDelete ({_id: req.params.itemId, _user: req.user._id});
+      const item = await Item.findOneAndDelete({_id: req.params.itemId, _user: req.user._id});
       res.send(item);
     } catch (err) {
       next(err)
@@ -132,13 +139,23 @@ module.exports = app => {
   // Update an item
   app.put('/api/item/:itemId', requireLogin, async (req, res) => {
 
+    const {title, body, imageId, visibility} = req.body
+
+    const data = {
+      title,
+      body,
+      visibility,
+      _image: imageId ? imageId : null
+    }
+
+
     // Returns the updated item!
     // Detta BORDE fungera för att kolla så rätt användare uppdaterar.
     // Om det är fel användare så borde inte objektet hittas...
     try {
       const item = await Item.findOneAndUpdate (
         {_id: req.params.itemId, _user: req.user._id},
-        {$set: req.body},
+        {$set: data},
         {new: true, useFindAndModify: false}
       );
       res.send(item);

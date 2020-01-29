@@ -11,6 +11,7 @@ const keys = require('./config/keys');
 //const passportConfig = require('./services/passport');
 require('./models/User');
 require('./models/Item');
+require('./models/Image');
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
@@ -41,6 +42,7 @@ app.use(passport.session());
 require('./routes/authRoutes')(app);
 require('./routes/userRoutes')(app);
 require('./routes/itemRoutes')(app);
+require('./routes/imageRoutes')(app);
 
 
 if(process.env.NODE_ENV === 'production') {
