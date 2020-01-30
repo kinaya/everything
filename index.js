@@ -45,6 +45,16 @@ require('./routes/imageRoutes')(app);
 
 
 if(process.env.NODE_ENV === 'production') {
+
+
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https') {
+      res.redirect(`https://${req.header('host')}${req.url}`)
+    } else {
+      next();
+    }
+  });
+  
   // express will serve production assets, like main.js
   // Loog into this file and find it!
   app.use(express.static('client/build'));
