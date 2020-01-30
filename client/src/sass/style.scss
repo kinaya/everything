@@ -54,6 +54,7 @@ h1.baloo {
 a {
   transition: border 0.3s;
   color: $cyan;
+  border-bottom: 1px solid transparent;
   &:hover, &:active, &:focus {
     border-bottom: 1px solid $cyan;
     text-decoration: none;
