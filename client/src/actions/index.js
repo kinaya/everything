@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {CLEAR_ROUTE_STATE, FETCH_USER, FETCH_ITEMS, FETCH_ITEM, UPDATE_LOADING, FETCH_USER_ITEMS, FETCH_PROFILE, FETCH_USERS } from './types';
+import {CLEAR_ROUTE_STATE, FETCH_FEATURED_ITEMS, FETCH_USER, FETCH_ITEMS, FETCH_ITEM, UPDATE_LOADING, FETCH_USER_ITEMS, FETCH_PROFILE, FETCH_USERS } from './types';
 import { toast } from 'react-toastify'
 import randomize from 'randomatic'
 
@@ -8,8 +8,6 @@ import { SubmissionError } from 'redux-form'
 
 /* == Images == */
 export const createImage = (file) => async dispatch => {
-  console.log('createImage')
-  console.log(file)
   const fileName = encodeURIComponent(file.name)
   try {
     const random = randomize('a0', 10);
@@ -29,7 +27,6 @@ export const createImage = (file) => async dispatch => {
 }
 
 export const deleteImage = (imageId) => async dispatch => {
-  console.log('deleteImage', imageId)
   try {
     const res = await axios.post(`/api/deleteImage`, {imageId})
     return res.status;
@@ -69,6 +66,8 @@ export const deleteUser = (userId, history) => async dispatch => {
 
 /* ====================== Item ====================== */
 
+
+
 export const createItem = (formValues, history) => async dispatch => {
   try {
     const res = await axios.post('/api/items', formValues);
@@ -87,11 +86,14 @@ export const createItem = (formValues, history) => async dispatch => {
   }
 }
 
+export const fetchFeatured = () => async dispatch => {
+  const res = await axios.get('/api/items/featured');
+  dispatch({type: FETCH_FEATURED_ITEMS, payload: res.data})
+}
+
 export const fetchItems = () => async dispatch => {
   const res = await axios.get('/api/items');
-  console.log('fetch item')
   dispatch({type: FETCH_ITEMS, payload: res.data})
-  console.log('two')
 }
 
 export const fetchUserItems = (userId) => async dispatch => {
@@ -100,9 +102,6 @@ export const fetchUserItems = (userId) => async dispatch => {
 }
 
 export const fetchItem = (itemId) => async dispatch => {
-  console.log('starting fetch item')
-
-
   try {
     const res = await axios.get(`/api/item/${itemId}`);
     dispatch({type: FETCH_ITEM, payload: res.data})
@@ -114,8 +113,6 @@ export const fetchItem = (itemId) => async dispatch => {
 }
 
 export const editItem = (itemId, formValues, history) => async dispatch => {
-  console.log('editItem:', formValues)
-
   const res = await axios.put(`/api/item/${itemId}`, formValues)
   history.push(`/item/${res.data._id}`);
   toast.success(`${res.data.title} är uppdaterad`,{position: toast.POSITION.TOP_CENTER});

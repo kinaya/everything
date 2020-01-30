@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom';
 import * as actions from '../../actions'
-import ItemBorrowForm from './ItemBorrowForm';
+import ItemBorrowForm from './../forms/ItemBorrowForm';
 import Loading from '../Loading';
 
 class Item extends Component {
@@ -27,15 +27,14 @@ class Item extends Component {
 
           <h2>{item.title}</h2>
 
-          <div className="visibility">
-            {!item.visibility && (
-              <div>Denna sak visas inte för tillfället</div>
-            )}
-          </div>
-
           <div className="meta">
-            <Link to={`/user/${item._user._id}`}>{item._user.name}</Link>
-            <span>{new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', year: 'numeric'})}</span>
+            <div className="image">
+              <img className="image-small" alt={item._user.name} src={item._user.image} />
+            </div>
+            <div className="text">
+              <Link to={`/user/${item._user._id}`}>{item._user.name}</Link>
+              <span>{new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', year: 'numeric'})}</span>
+            </div>
           </div>
 
           {item._image && (
@@ -55,7 +54,7 @@ class Item extends Component {
 
         </div>
 
-        <ItemBorrowForm name={item._user.name} />
+        <ItemBorrowForm name={item._user.name} title={item.title} />
 
       </div>
     )

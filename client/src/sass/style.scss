@@ -1,10 +1,18 @@
 html, body, #root {
   height: 100%;
 }
+html {
+  font-size: 16px;
+}
 
 body {
   background-color: #f8f8f8;
   color: #333333;
+}
+
+p {
+  font-size: 1.2em;
+  font-weight: 300;
 }
 
 #root {
@@ -16,24 +24,79 @@ body {
   flex: 1 0 auto;
 }
 
+/* colors */
+$white: #ffffff;
+$green:  #66bb6a;
+$cyan: #26a69a;
+
+/* header */
+.header {
+  background-color: $green;
+}
+.logo {
+  font-family: 'Pacifico', cursive;
+  color: $white;
+  font-size: 2em;
+  margin: -5px 0 0 0.5em;
+  &:hover, &:active, &:focus {
+    border: 0;
+  }
+}
+
+h1, h2, h3, h4, h5 {
+//  font-family: 'Oswald', sans-serif;
+}
+
+h1.baloo {
+  font-family: 'Baloo Thambi', cursive;
+}
+
+a {
+  transition: border 0.3s;
+  color: $cyan;
+  &:hover, &:active, &:focus {
+    border-bottom: 1px solid $cyan;
+    text-decoration: none;
+  }
+}
+
+/* ======================= Landing =========================== */
+.intro {
+  text-align: center;
+  max-width: 500px;
+  margin: 6em auto;
+  p {
+    font-size: 1.4em;
+    margin-bottom: 2em;
+  }
+}
+
 /* ======================= item =========================== */
+
 .meta {
-  span {
-    border-left: 1px solid gray;
-    margin-left: 0.5em;
-    padding-left: 0.5em;
+  display: flex;
+  .image {
+    margin-right: 0.5em;
+  }
+  .text span {
+    display: block;
   }
 }
 
 .itemBorrowForm {
   margin: 4em 0 -4em 0;
   background-color: #E3F2FD;
-  padding: 2em 0 3em 0;
+  padding: 4em 0 5em 0;
+  form {
+    margin-top: 3em;
+  }
 }
 
 /* ======================= items =========================== */
-.itemFilter {
-  margin: 2em 0;
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .item-preview {
@@ -66,23 +129,56 @@ body {
     margin-top:0;
   }
 
+  transition: all 0.3s;
+  &:hover, &:active, &:focus {
+    transform: scale(1.03);
+  }
+
 }
 
-/* ======================= item =========================== */
+/* ======================= Images =========================== */
+.image-large {
+  max-width: 100%;
+  margin: 2em 0;
+}
+
+.image-small {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.image-medium {
+  border-radius: 50%;
+  width: 200px;
+  height: auto;
+}
+
+/* ======================= Footer =========================== */
 .footer {
-  background-color: #ee6e73;
+  background-color: $green;
   color: #ffffff;
   padding: 2em 0;
   margin-top: 4em;
   flex-shrink: 0;
+
+  a {
+    float: right;
+    color: $white;
+    margin-left: 1em;
+    &:hover, &:focus, &:active {
+      border-bottom: 1px solid $white;
+    }
+  }
+}
+
+/* ======================= Forms =========================== */
+
+.itemFilterForm {
+  margin: 2em 0;
 }
 
 .file-preview {
-  max-width: 200px;
-  height: auto;
-}
-
-.image-large {
   max-width: 200px;
   height: auto;
 }
@@ -91,8 +187,6 @@ body {
   position: absolute;
   top: -10000px;
   left: -10000px;
-//  visibility: hidden;
-//  display: none;
 }
 .file-wrapper {
   width: 200px;
@@ -110,23 +204,24 @@ body {
     align-items: center;
   }
 }
-
-.switch {
-  margin-bottom: 2em;
-}
-
 .file-preview-wrapper i {
   position: absolute;
   top: -10px;
   left: -10px;
   cursor: pointer;
 }
+.switch {
+  margin-bottom: 2em;
+}
+
 
 /* ======================= user =========================== */
-.avatar {
-  border-radius: 50%;
-  width: 100px;
-  height: auto;
+
+.user-info {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 4em;
 }
 
 .userItems {

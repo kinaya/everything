@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import ItemPreview from './ItemPreview';
-import ItemFilterForm from './ItemFilterForm';
+import ItemFilterForm from './../forms/ItemFilterForm';
 import { connect } from 'react-redux';
 import  * as actions from '../../actions';
 import sortObjects from '../../utils/sortObjects';
@@ -65,7 +65,6 @@ class ItemList extends Component {
     }
 
     return (
-      <div className="items">
         <div className="container">
 
         <ItemFilterForm />
@@ -75,7 +74,6 @@ class ItemList extends Component {
         </div>
 
         </div>
-      </div>
     );
   }
 }

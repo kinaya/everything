@@ -25,6 +25,22 @@ module.exports = app => {
   })
 
   /*
+  * Get featured items
+  */
+  app.get('/api/items/featured', async (req, res, next) => {
+
+    Item.find()
+      .sort({'datePosted': -1})
+      .limit(6)
+      .populate([{path:'_user', select:'_id name'}, {path:'_image'}])
+      .exec((err, items) => {
+        if(err) { next (err)}
+        res.status(201).send(items);
+      })
+
+  })
+
+  /*
   * Get a specific users items
   */
   app.get('/api/items/:userId', [
@@ -66,10 +82,12 @@ module.exports = app => {
     }
 
     // Get item and respond
-    try {
-      const item = await Item.findOne({_id: req.params.itemId}).populate('_user', '_id, name').populate('_image')
-      res.send(item)
-    } catch (err) { next(err) }
+    Item.findOne({_id: req.params.itemId})
+      .populate([{path:'_user', select:'_id name image'}, {path:'_image'}])
+      .exec((err, item) => {
+        if(err) { next (err)}
+        res.send(item);
+      })
 
   })
 

@@ -8,7 +8,6 @@ export default function (ComposedComponent) {
   class privateRoute extends React.Component {
 
     componentDidMount() {
-      console.log('this!!')
       this.props.fetchItem(this.props.match.params.id)
     }
 

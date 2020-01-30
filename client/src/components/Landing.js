@@ -1,27 +1,27 @@
 import React from 'react';
+import Featured from './items/Featured'
 
-const Landing = () => {
-  return (
-    <div style={{textAlign: 'center'}}>
-      <h1>Welcome to EveryThing!</h1>
-      By sharing we have access to the whole world
+const Landing = () => (
+  <div className="landing">
+    <div className="container">
 
-      <div className="row">
-        <div class="col s12 m4">
-          <h4>Lorem ipsum</h4>
-          <p>We did most of the heavy lifting for you to provide a default stylings that incorporate our custom components.</p>
-        </div>
-        <div class="col s12 m4">
-          <h4>Lorem ipsum</h4>
-          <p>We did most of the heavy lifting for you to provide a default stylings that incorporate our custom components.</p>
-        </div>
-        <div class="col s12 m4">
-          <h4>Lorem ipsum</h4>
-          <p>We did most of the heavy lifting for you to provide a default stylings that incorporate our custom components.</p>
-        </div>
+      <div className="intro">
+
+        <h1 className="baloo">Tillsammans har vi allt</h1>
+
+        <p>Låna det du behöver, och låna ut sånt du själv inte använder så ofta.
+        Bra för dig, miljön och världen ♥</p>
+
+        <a href="/auth/google" className="waves-effect waves-light btn orange darken-2">Logga in med Google</a>
+
       </div>
+
+      <div className="featured">
+        <Featured />
+      </div>
+
     </div>
-  );
-}
+  </div>
+)
 
 export default Landing;

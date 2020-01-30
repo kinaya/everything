@@ -4,6 +4,7 @@ import itemsReducer from './itemsReducer'
 import loadingReducer from './loadingReducer'
 import profilesReducer from './profilesReducer';
 import routeStateReducer from './routeStateReducer';
+import featuredReducer from './featuredReducer';
 import { reducer as reduxForm} from 'redux-form'
 
 export default combineReducers({
@@ -12,5 +13,6 @@ export default combineReducers({
   items: itemsReducer,
   loading: loadingReducer,
   users: profilesReducer,
-  routeState: routeStateReducer
+  routeState: routeStateReducer,
+  featured: featuredReducer
 });

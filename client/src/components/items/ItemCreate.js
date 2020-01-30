@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
-import ItemForm from './ItemForm';
+import ItemForm from './../forms/ItemForm';
 
 class ItemCreate extends Component {
 

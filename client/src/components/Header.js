@@ -1,41 +1,47 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-class Header extends Component {
+const Header = ({user}) => (
 
-  renderMenu() {
-    switch(this.props.user) {
-      case false:
-        return (
-          <li><a href="/auth/google">Login with Google</a></li>
-        );
-      default:
-        return [
-          <li key="4"><Link to="/item/new">Lägg till</Link></li>,
-          <li key="2"><Link to={`/user/${this.props.user._id}`}>Mitt konto</Link></li>
-        ];
-    }
-  }
+  <nav className="header">
+    <div className="nav-wrapper">
 
+      <Link to={user ? '/items' : '/'} className="logo left" >EveryThing</Link>
 
-  render() {
-    return (
-      <nav>
-         <div className="nav-wrapper">
-           <Link to={this.props.user ? '/items' : '/'} className="brand-logo left" >EveryThing</Link>
-           <ul id="nav" className="right">
-              {this.renderMenu()}
-           </ul>
-         </div>
-       </nav>
-    );
-  }
-}
+      {!user && (
+        <ul id="nav" className="right">
+          <li>
+            <a href="/auth/google">Logga in med Google</a>
+          </li>
+        </ul>
+      )}
 
-// Hans desctructoring of auth doesn't work!
-function mapStateToProps(state) {
-  return {user: state.user}
+      {user && (
+        <ul id="nav" className="right">
+
+          <li key="1">
+            <Link to="/item/new" className="btn-floating btn-small waves-effect waves-light green darken-3">
+              <i className="material-icons">add</i>
+            </Link>
+          </li>
+
+          <li key="2">
+            <Link to={`/user/${user._id}`}>
+              Mitt konto
+            </Link>
+          </li>
+
+        </ul>
+      )}
+
+     </div>
+   </nav>
+
+);
+
+function mapStateToProps({user}) {
+  return {user}
 }
 
 export default connect(mapStateToProps)(Header);

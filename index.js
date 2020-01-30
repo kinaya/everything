@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
-const keys = require('./config/keys');
 
 // We just want the file to run. So we don't need
 //const passportConfig = require('./services/passport');
@@ -14,7 +13,7 @@ require('./models/Item');
 require('./models/Image');
 require('./services/passport');
 
-mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 
 // Generate a running express app
 const app = express();
@@ -25,7 +24,7 @@ app.use(bodyParser.json());
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 day
-    keys: [keys.cookieKey]
+    keys: [process.env.COOKIE_KEY]
   })
 );
 app.use(passport.initialize());

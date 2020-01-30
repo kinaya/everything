@@ -19,6 +19,8 @@ import ItemCreate from  './items/ItemCreate';
 import Loading from './Loading';
 import Users from './user/Users';
 import UserSettings from './user/UserSettings';
+import Faq from './Faq';
+import Contact from './Contact';
 import withOwnItemCheck from './withOwnItemCheck';
 
 
@@ -46,6 +48,8 @@ class App extends Component {
         <div className="content">
           <Switch>
             <Route exact path="/" component={Landing} />
+            <Route exact path="/contact" component={Contact} />
+            <Route exact path="/faq" component={Faq} />
             <Route exact path="/user/login" component={Login} />
             <RestrictedRoute exact path="/users" component={Users} />
             <RestrictedRoute exact path="/user/:id" component={User} />

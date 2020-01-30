@@ -16,9 +16,18 @@ class User extends Component {
     this.props.clearRouteState()
   }
 
+  // To force reload if on another users profile and clicks "My account"
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.match.params.id !== this.props.match.params.id) {
+      this.props.fetchProfile(this.props.match.params.id);
+      this.props.fetchUserItems(this.props.match.params.id);
+    }
+  }
+
+
   render() {
 
-    const { userItems, deleteItem, user, profile } = this.props
+    const { userItems, user, profile } = this.props
 
     if(!profile || !userItems) { return (
       <Loading />
@@ -28,26 +37,32 @@ class User extends Component {
       <div className="user">
         <div className="container">
 
-          <h3>{profile.name}</h3>
+          <div className="user-info">
+            <img className="image-medium" src={`${profile.image}`} alt={profile.name} />
 
-          {user._id === profile._id &&
-            <a href="/api/logout">Logout</a>
-          }
+            <h4>{profile.name}</h4>
 
-          <p>{profile.email}</p>
+            <p>{profile.email}</p>
 
-          <img className="avatar" src={`${profile.image}`} alt="profile" />
+            {user._id === profile._id &&
+              <a href="/api/logout">Logout</a>
+            }
+
+          </div>
 
         </div>
 
         <div className="userItems">
           <div className="container">
-            <h4>{profile.name}s saker</h4>
-            <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
+
+            <h5>{user._id === profile._id ? 'Mina' : profile.name + 's'} saker</h5>
+
+            <div className="items">
               {userItems.filter(item => item._user._id === user._id || item.visibility).map(item => { return (
-                <ItemPreview key={item._id} item={item} onDelete={(id, history) => deleteItem(id, history)} displayButtons={user._id === item._user._id ? true : false} />
+                <ItemPreview key={item._id} item={item} />
               )})}
             </div>
+
           </div>
         </div>
 

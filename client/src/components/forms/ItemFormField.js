@@ -2,24 +2,20 @@ import React from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css';
 
-export const TextField = ({input, label, meta}) => {
-  return (
-    <div>
-      <label>{label}</label>
-      <input style={{marginBottom: '5px'}} {...input} />
-      <div className="red-text" style={{marginBottom: '20px'}}>{meta.touched && meta.error}</div>
-    </div>
-  )
-}
+export const TextField = ({input, label, meta, ...rest}) => (
+  <div>
+    <label>{label}</label>
+    <input {...input} {...rest} />
+    <div className="red-text" style={{marginBottom: '20px'}}>{meta.touched && meta.error}</div>
+  </div>
+)
 
-export const TextArea = ({input, meta}) => {
-  return (
-    <div>
-      <textarea {...input} className="materialize-textarea" />
-      <div className="red-text" style={{marginBottom: '20px'}}>{meta.touched && meta.error}</div>
-    </div>
-  )
-};
+export const TextArea = ({input, label, meta, ...rest}) => (
+  <div>
+    <textarea {...input} {...rest} className="materialize-textarea" />
+    <div className="red-text" style={{marginBottom: '20px'}}>{meta.touched && meta.error}</div>
+  </div>
+)
 
 export const RadioButton = ({ input, meta, ...rest }) => {
   return (
