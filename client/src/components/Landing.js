@@ -3,7 +3,7 @@ import Featured from './items/Featured'
 
 const Landing = () => (
   <div className="landing">
-    <div className="container">
+    <div className="container container-large">
 
       <div className="intro">
 

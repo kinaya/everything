@@ -60,6 +60,14 @@ a {
   }
 }
 
+/* ======================= Container =========================== */
+.container {
+  max-width: 740px;
+}
+.container-large {
+  max-width: 1280px;
+}
+
 /* ======================= Landing =========================== */
 .intro {
   text-align: center;

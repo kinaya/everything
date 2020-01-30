@@ -65,7 +65,7 @@ class ItemList extends Component {
     }
 
     return (
-        <div className="container">
+        <div className="container container-large">
 
         <ItemFilterForm />
 

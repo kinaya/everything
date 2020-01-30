@@ -53,7 +53,7 @@ class User extends Component {
         </div>
 
         <div className="userItems">
-          <div className="container">
+          <div className="container container-large">
 
             <h5>{user._id === profile._id ? 'Mina' : profile.name + 's'} saker</h5>
 
