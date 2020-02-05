@@ -1,17 +1,14 @@
-module.exports = (req, res, next) => {
+const mongoose = require('mongoose')
+const Item = mongoose.model('items');
 
-  //console.log(req.params.itemId);
-  // Get the itemId from the URL
-/*  const getItemId = () => {
-    const p = new Path('/api/:itemId/:choice')
-    const match = p.test(new URL(req.url).pathname)
-    if(match) { return {itemId: match.itemId}}
-  }
-  console.log(getItemId())
-  console.log(req.url)*/
+module.exports = async (req, res, next) => {
 
-  if(!req.user) {
-    return res.status(401).send({error: 'You must log in!'})
+  const item = await Item.findOne({_id: req.params.id});
+  if(!item._user.equals(req.user._id)) {
+    var error = new Error("Not correct user")
+    error.status = 401;
+    next(error)
   }
-  next(); // COntinue
+
+  next();
 };

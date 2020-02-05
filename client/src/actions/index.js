@@ -1,145 +1,189 @@
 import axios from 'axios';
-import {CLEAR_ROUTE_STATE, FETCH_FEATURED_ITEMS, FETCH_USER, FETCH_ITEMS, FETCH_ITEM, UPDATE_LOADING, FETCH_USER_ITEMS, FETCH_PROFILE, FETCH_USERS } from './types';
+import {UPDATE_POSITION, CLEAR_ROUTE_STATE, FETCH_FEATURED_ITEMS, FETCH_USER, FETCH_ITEMS, FETCH_ITEM, UPDATE_LOADING, FETCH_USER_ITEMS, FETCH_PROFILE, FETCH_USERS } from './types';
 import { toast } from 'react-toastify'
 import randomize from 'randomatic'
+import { addDistance } from '../utils/addDistance';
+import history from '../history'
+import handleError from './errorHandler'
 
-import { SubmissionError } from 'redux-form'
 
+/* ====================== Image ====================== */
 
-/* == Images == */
+// Create an image
 export const createImage = (file) => async dispatch => {
+
+  // Create a random unique filename
   const fileName = encodeURIComponent(file.name)
-  try {
-    const random = randomize('a0', 10);
-    // Create a random fileName
-    const fileNameExtension = fileName.split('.').pop();
-    const fileNameText = fileName.replace(/\.[^/.]+$/, "")
-    const fileNameRandom = fileNameText + '-' + random + '.' + fileNameExtension;
+  const random = randomize('a0', 10);
+  const fileNameExtension = fileName.split('.').pop();
+  const fileNameText = fileName.replace(/\.[^/.]+$/, "")
+  const fileNameRandom = fileNameText + '-' + random + '.' + fileNameExtension;
 
+  try {
+    // Get a signed request from server
     const res = await axios.get(`/api/image/new?fileName=${fileNameRandom}&fileType=${file.type}`)
-
+    // Upload image to AWS S3
     await axios.put(res.data.signedRequest, file)
+    // Return the image data
     return res.data.image;
-
-  } catch (err) {
-    console.log(err)
-  }
+  } catch (e) { handleError(e) }
 }
 
-export const deleteImage = (imageId) => async dispatch => {
+// Delete an image
+export const deleteImage = (id) => async dispatch => {
   try {
-    const res = await axios.post(`/api/deleteImage`, {imageId})
+    const res = await axios.delete(`/api/image/${id}`)
     return res.status;
-  } catch (err) {
-    console.log(err)
-  }
+  } catch (e) { handleError(e) }
 }
-
 
 /* ====================== Users ====================== */
+
+// Fetch all users
 export const fetchUsers = () => async dispatch => {
-  const res = await axios.get('/api/users')
-  dispatch({type: FETCH_USERS, payload: res.data})
-}
-
-export const fetchCurrentUser = () => async dispatch => {
-  const res = await axios.get('/api/current_user')
-  dispatch({ type: FETCH_USER, payload: res.data })
-  dispatch({ type: UPDATE_LOADING, payload: false})
-}
-
-export const fetchProfile = (userId) => async dispatch => {
-  const res = await axios.get(`/api/user/${userId}`)
-  dispatch({type: FETCH_PROFILE, payload: res.data})
-}
-
-export const deleteUser = (userId, history) => async dispatch => {
   try {
-    const res = await axios.delete(`/api/user/${userId}`);
+    const res = await axios.get('/api/users')
+    dispatch({type: FETCH_USERS, payload: res.data})
+  } catch (e) { handleError(e) }
+}
+
+// Fetch the current user
+export const fetchCurrentUser = () => async dispatch => {
+  try {
+    const res = await axios.get('/api/current_user')
+    dispatch({ type: FETCH_USER, payload: res.data })
+    dispatch({ type: UPDATE_LOADING, payload: false})
+  } catch (e) { handleError(e) }
+}
+
+// Fetch a profile
+export const fetchProfile = (id) => async dispatch => {
+  try {
+    const res = await axios.get(`/api/user/${id}`)
+    dispatch({type: FETCH_PROFILE, payload: res.data})
+  } catch (e) { handleError(e) }
+}
+
+// Delete user
+export const deleteUser = (id) => async dispatch => {
+  try {
+    const res = await axios.delete(`/api/user/${id}`);
     history.push('/');
     toast.success(`Användaren ${res.data.name} är nu borttagen`, {position: toast.POSITION.TOP_CENTER});
-  } catch (err) {
-    toast.error('Användaren kunde inte tas bort', {position: toast.POSITION.TOP_CENTER});
-  }
+  } catch (e) { handleError(e) }
 }
 
+/* ====================== Items ====================== */
 
-/* ====================== Item ====================== */
-
-
-
+// Create an item
 export const createItem = (formValues, history) => async dispatch => {
+  delete formValues.file; // Remove file field
+  if(formValues._image === '') {
+    delete formValues._image
+  }
   try {
     const res = await axios.post('/api/items', formValues);
     history.push(`/item/${res.data._id}`);
     toast.success(`${res.data.title} är nu uppladdad`,{position: toast.POSITION.TOP_CENTER});
-  } catch (err) {
-    if(err.response.data.name === 'BadRequestError') {
-      const errorObject = {_error: 'Failed!'}
-      err.response.data.errors.map(error => (
-        errorObject[error.param] = error.msg
-      ))
-      throw new SubmissionError(errorObject)
-    } else {
-      toast.error(err.response.data, {position: toast.POSITION.TOP_CENTER})
-    }
-  }
+  } catch (e) { handleError(e) }
 }
 
-export const fetchFeatured = () => async dispatch => {
-  const res = await axios.get('/api/items/featured');
-  dispatch({type: FETCH_FEATURED_ITEMS, payload: res.data})
-}
-
-export const fetchItems = () => async dispatch => {
-  const res = await axios.get('/api/items');
-  dispatch({type: FETCH_ITEMS, payload: res.data})
-}
-
-export const fetchUserItems = (userId) => async dispatch => {
-  const res = await axios.get(`/api/items/${userId}`)
-  dispatch({type: FETCH_USER_ITEMS, payload: res.data})
-}
-
-export const fetchItem = (itemId) => async dispatch => {
+// Fetch featured items
+export const fetchFeatured = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get(`/api/item/${itemId}`);
-    dispatch({type: FETCH_ITEM, payload: res.data})
-  } catch (e) {
-    if (e.response && e.response.data) {
-      toast.error(e.response.data.message, {position: toast.POSITION.TOP_CENTER})
+    const res = await axios.get('/api/items/featured');
+    let items = res.data;
+    if(getState().userCoordinates) {
+      items = addDistance(res.data, getState().userCoordinates)
     }
-  }
+    dispatch({type: FETCH_FEATURED_ITEMS, payload: items})
+  } catch (e) { handleError (e) }
 }
 
+// Fetch all items
+export const fetchItems = () => async (dispatch, getState) => {
+  try {
+    const res = await axios.get('/api/items');
+    let items = res.data;
+    if(getState().userCoordinates) {
+      items = addDistance(items, getState().userCoordinates)
+    }
+    dispatch({type: FETCH_ITEMS, payload: items})
+  } catch (e) { handleError(e) }
+}
+
+// Fetch a users items
+export const fetchUserItems = id => async (dispatch, getState) => {
+  try {
+    const res = await axios.get(`/api/items/${id}`)
+    let items = res.data;
+    if(getState().userCoordinates) {
+      items = addDistance(items, getState().userCoordinates)
+    }
+    dispatch({type: FETCH_USER_ITEMS, payload: items})
+  } catch (e) { handleError(e) }
+}
+
+// Fetch a specific item
+export const fetchItem = id => async (dispatch, getState) => {
+  try {
+    const res = await axios.get(`/api/item/${id}`);
+    let item = res.data;
+    if(getState().userCoordinates) {
+      item = addDistance(item, getState().userCoordinates)
+    }
+    dispatch({type: FETCH_ITEM, payload: item})
+  } catch (e) { handleError(e) }
+}
+
+// Edit an item
 export const editItem = (itemId, formValues, history) => async dispatch => {
-  const res = await axios.put(`/api/item/${itemId}`, formValues)
-  history.push(`/item/${res.data._id}`);
-  toast.success(`${res.data.title} är uppdaterad`,{position: toast.POSITION.TOP_CENTER});
+  delete formValues.file; // Remove file field
+  if(formValues._image === '') {
+    delete formValues._image
+  }
+  try {
+    const res = await axios.put(`/api/item/${itemId}`, formValues)
+    history.push(`/item/${res.data._id}`);
+    toast.success(`${res.data.title} är uppdaterad`,{position: toast.POSITION.TOP_CENTER});
+  } catch (e) { handleError(e) }
 }
 
+// Delete an item
 export const deleteItem = (itemId, history) => async dispatch => {
   try {
     const res = await axios.delete(`/api/item/${itemId}`);
     history.push('/items');
     toast.success(`${res.data.title} är nu borttagen`,{position: toast.POSITION.TOP_CENTER});
-  } catch (err) {
-      console.log('err', err)
-//    if (err.response && err.response.data) {
-//      toast.error(err.response.data.message, {position: toast.POSITION.TOP_CENTER})
-//    }
-  }
-
+  } catch (e) { handleError(e) }
 }
 
-/* ====================== Borrow ====================== */
-export const sendBorrowRequest = (formValues) => async dispatch => {
-  console.log('sendBorrowRequest with message:', formValues.body)
+/* ====================== Requests ====================== */
+
+// Send a request
+export const sendRequest = (item, formValues, from, to) => async dispatch => {
+  console.log('A send request was made with the following data:')
+  console.log('item', item)
+  console.log('from', from)
+  console.log('to', to)
+  console.log('body', formValues.body)
 }
 
+/* ====================== Route state ====================== */
 
-/* ====================== Temp data ====================== */
-
+// Clear route state
 export const clearRouteState = () => async dispatch => {
   dispatch({type: CLEAR_ROUTE_STATE})
+}
+
+/* ====================== Geolocation ====================== */
+
+// Get users location
+export const getLocation = () => dispatch => {
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const coords = [position.coords.latitude, position.coords.longitude]
+      dispatch({type: UPDATE_POSITION, payload: coords})
+    });
+  }
 }

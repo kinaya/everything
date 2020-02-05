@@ -9,10 +9,9 @@ import { createLogger } from 'redux-logger';
 import App from './components/App';
 import reducers from './reducers';
 
-// Temp test code!
-//import axios from 'axios';
-//window.axios = axios;
-// With this you can write axios.post('/api/survey', survey) in the browser console!
+// Use for testing api from browser console
+import axios from 'axios';
+window.axios = axios;
 
 const loggerMiddleware = createLogger();
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk,loggerMiddleware))

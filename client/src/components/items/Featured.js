@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import ItemPreview from './ItemPreview';
+import Loading from '../Loading';
 
 class Featured extends Component {
 
@@ -14,7 +15,7 @@ class Featured extends Component {
     const { featured } = this.props;
 
     if(!featured) {
-      return <div></div>
+      return (<Loading />)
     }
 
     return (

@@ -15,25 +15,20 @@ class ItemList extends Component {
 
   displayResults(items, filter) {
 
-    if(!items) {
-      return <Loading />
-    }
-
-    let filteredItems;
-
-    // Search
+    // SearchFilter
     let searchQuery = '';
     if(filter && filter.search) {
       searchQuery = filter.search.toLowerCase()
     }
 
-    filteredItems = items.filter(item => { return (
-      item.visibility &&
-      (
-        item.title.toLowerCase().includes(searchQuery)
-        || item.body.toLowerCase().includes(searchQuery)
-      )
-    )})
+    // TypeFilter
+    let typeArray = ['lend', 'giveaway', 'public']
+    if(filter) {
+      typeArray = []
+      filter.display_lend && typeArray.push('lend')
+      filter.display_giveaway && typeArray.push('giveaway')
+      filter.display_public && typeArray.push('public')
+    }
 
     // Order
     let key = "body"
@@ -44,9 +39,20 @@ class ItemList extends Component {
       order = vars[1]
     }
 
+    // Filter the items
+    const filteredItems = items.filter(item => (
+      item.visibility &&
+      typeArray.includes(item.type) &&
+      (
+        item.title.toLowerCase().includes(searchQuery) ||
+        item.body.toLowerCase().includes(searchQuery) ||
+        item._user.name.toLowerCase().includes(searchQuery)
+      )
+    ))
+
     if(filteredItems.length !== 0) { return (
       filteredItems.sort(sortObjects(key, order)).map(item => { return (
-        <ItemPreview key={item._id} item={item} onDelete={(id, history) => this.props.deleteItem(id, history)} displayButtons={this.props.user._id === item._user._id ? true : false} />
+        <ItemPreview key={item._id} item={item} />
       )})
     )}
 
@@ -59,33 +65,31 @@ class ItemList extends Component {
 
     const { items, form } = this.props
 
+    if(!items) {
+      return <Loading />
+    }
+
     let filter = false
     if(form.itemFilterForm && form.itemFilterForm.values) {
       filter = form.itemFilterForm.values
     }
 
     return (
-        <div className="container container-large">
+      <div className="container container-large">
 
         <ItemFilterForm />
 
-        <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
+        <div className="items">
           {this.displayResults(items, filter)}
         </div>
 
-        </div>
+      </div>
     );
   }
 }
 
-function mapStateToProps({items, user, form}) {
-  return { items, user, form }
-}
+const mapStateToProps = ({items, user, form}) => (
+  { items, user, form }
+)
 
 export default connect(mapStateToProps, actions)(ItemList);
-
-
-/*          {items.map(item => { return (
-            <ItemPreview key={item._id} item={item} onDelete={(id, history) => deleteItem(id, history)} displayButtons={user._id === item._user ? true : false} />
-          )})}
-*/

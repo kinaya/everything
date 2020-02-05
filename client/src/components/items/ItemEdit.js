@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
 import ItemForm from './../forms/ItemForm';
+import Loading from '../Loading';
 
 class ItemEdit extends Component {
 
@@ -22,21 +23,24 @@ class ItemEdit extends Component {
     const { item } = this.props;
 
     const initialValues = {
-      imageId: item._image ? item._image._id : false,
       title: item.title,
       body: item.body,
-      visibility: item.visibility
+      visibility: item.visibility,
+      coordinates: item.coordinates,
+      type: item.type
+    }
+    if(item._image) {
+      initialValues._image = item._image._id
     }
 
-
     if(!item) {
-      return <div>Loading...</div>
+      return <Loading />
     }
 
     return (
       <div className="itemEdit">
         <div className="container">
-          <h2>Edit <span style={{fontStyle: 'italic'}}>{item.title}</span></h2>
+          <h2>Edit <span className="italic">{item.title}</span></h2>
           <ItemForm onSubmit={this.onSubmit} submitText="Uppdatera" imageState={item._image} initialValues={initialValues} submitIcon="edit" />
         </div>
       </div>
@@ -45,7 +49,7 @@ class ItemEdit extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {item: state.routeState.item } // Jag måste kanske ta bort vurrent item när komponent stänges annars kommer det flasha här??
+  return {item: state.routeState.item }
 }
 
 export default connect(mapStateToProps, actions)(ItemEdit);

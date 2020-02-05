@@ -10,12 +10,11 @@ class ItemCreate extends Component {
   }
 
   render() {
-    console.log('huh')
     return (
       <div className="itemCreate">
         <div className="container">
-          <h2>Lägg till en sak</h2>
-          <ItemForm initialValues={{visibility: true}} imageState={false} onSubmit={this.onSubmit} submitText="Lägg till" submitIcon="add" />
+          <h2>Lägg till</h2>
+          <ItemForm imageState={false} onSubmit={this.onSubmit} submitText="Lägg till" submitIcon="add" />
         </div>
       </div>
     )

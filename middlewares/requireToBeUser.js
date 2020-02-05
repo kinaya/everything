@@ -1,8 +1,10 @@
 module.exports = (req, res, next) => {
-  if(!req.user) {
-    var error = new Error('User is not logged in')
+
+  if(req.params.id !== req.user._id) {
+    var error = new Error('Not correct user')
     error.status = 401;
     next(error)
   }
+
   next();
 };

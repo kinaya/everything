@@ -1,0 +1,13 @@
+.header {
+  background-color: $green;
+}
+
+.logo {
+  font-family: 'Pacifico', cursive;
+  color: $white;
+  font-size: 2em;
+  margin: -5px 0 0 0.5em;
+  &:hover, &:active, &:focus {
+    border: 0;
+  }
+}

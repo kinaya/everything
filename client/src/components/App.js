@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
+import history from '../history'
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { ToastContainer } from 'react-toastify';
@@ -21,6 +22,7 @@ import Users from './user/Users';
 import UserSettings from './user/UserSettings';
 import Faq from './Faq';
 import Contact from './Contact';
+import NotFound from './NotFound';
 import withOwnItemCheck from './withOwnItemCheck';
 
 
@@ -30,6 +32,7 @@ class App extends Component {
 
   componentDidMount() {
     this.props.fetchCurrentUser();
+    this.props.getLocation();
   }
 
   render() {
@@ -41,7 +44,7 @@ class App extends Component {
     }
 
     return (
-      <BrowserRouter>
+      <Router history={history}>
 
         <Header />
 
@@ -58,6 +61,9 @@ class App extends Component {
             <RestrictedRoute exact path="/item/new" component={ItemCreate} />
             <RestrictedRoute exact path="/item/:id" component={Item} />
             <Route exact path="/item/:id/edit" component={withOwnItemCheck(ItemEdit)} />
+
+            <Route exact path="/404" component={NotFound} />
+
           </Switch>
 
           <ToastContainer />
@@ -65,7 +71,7 @@ class App extends Component {
 
         <Footer />
 
-      </BrowserRouter>
+      </Router>
     );
 
   }

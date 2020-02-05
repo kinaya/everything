@@ -5,6 +5,7 @@ import loadingReducer from './loadingReducer'
 import profilesReducer from './profilesReducer';
 import routeStateReducer from './routeStateReducer';
 import featuredReducer from './featuredReducer';
+import positionReducer from './positionReducer';
 import { reducer as reduxForm} from 'redux-form'
 
 export default combineReducers({
@@ -14,5 +15,6 @@ export default combineReducers({
   loading: loadingReducer,
   users: profilesReducer,
   routeState: routeStateReducer,
-  featured: featuredReducer
+  featured: featuredReducer,
+  userCoordinates: positionReducer
 });

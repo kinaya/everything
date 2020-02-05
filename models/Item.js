@@ -7,7 +7,9 @@ const itemSchema = new Schema({
   _user: {type: Schema.Types.ObjectId, ref: 'users'},
   datePosted: Date,
   visibility: Boolean,
-  _image: {type: Schema.Types.ObjectId, ref: 'images'}
+  _image: {type: Schema.Types.ObjectId, ref: 'images'},
+  coordinates: [Number],
+  type: String
 });
 
 mongoose.model('items', itemSchema);

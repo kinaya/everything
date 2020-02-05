@@ -10,3 +10,5 @@ export const FETCH_USERS = 'fetch_users';
 export const FETCH_PROFILE = 'fetch_profile';
 
 export const CLEAR_ROUTE_STATE = 'clear_route_state';
+
+export const UPDATE_POSITION = 'update_position';

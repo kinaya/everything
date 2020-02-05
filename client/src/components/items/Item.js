@@ -2,8 +2,9 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom';
 import * as actions from '../../actions'
-import ItemBorrowForm from './../forms/ItemBorrowForm';
+import ContactUserForm from './../forms/ContactUserForm';
 import Loading from '../Loading';
+import Map from './Map';
 
 class Item extends Component {
 
@@ -33,7 +34,7 @@ class Item extends Component {
             </div>
             <div className="text">
               <Link to={`/user/${item._user._id}`}>{item._user.name}</Link>
-              <span>{new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', year: 'numeric'})}</span>
+              <span>{new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric'})}</span>
             </div>
           </div>
 
@@ -54,19 +55,53 @@ class Item extends Component {
 
         </div>
 
-        <ItemBorrowForm name={item._user.name} title={item.title} />
+
+        <div className="itemStats">
+          <div className="container">
+
+            {item.coordinates && item.coordinates.length !== 0 &&
+              <div className="stats-map">
+                <Map item={item} />
+              </div>
+            }
+
+            <div className="stats-stats">
+
+              {item.type === 'lend' && (
+                <p><i className="material-icons">access_time</i> Lånas ut</p>
+              )}
+
+              {item.type === 'giveaway' && (
+                <p><i className="material-icons">access_time</i> Skänkes bort</p>
+              )}
+
+              {item.type === 'public' && (
+                <p><i className="material-icons">access_time</i> Offentlig resurs</p>
+              )}
+
+              <p><i className="material-icons">date_range</i>{new Date(item.datePosted).toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric'})}</p>
+
+              <p><i className="material-icons">person</i><Link to={`/user/${item._user._id}`}>{item._user.name}</Link></p>
+
+              <p><i className="material-icons">my_location</i> ca {item.distance} km bort</p>
+
+            </div>
+          </div>
+        </div>
+
+        {!item.type === 'public' && !item._user._id !== user._id && (
+          <div className="contactUserForm">
+            <ContactUserForm name={item._user.name} title={item.title} />
+          </div>
+        )}
 
       </div>
     )
   }
 };
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return {item: state.routeState.item, user: state.user}
 }
-
-/*function mapStateToProps({item, user}) {
-  return {item, user};
-}*/
 
 export default connect(mapStateToProps, actions)(withRouter(Item));

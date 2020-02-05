@@ -1,0 +1,111 @@
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.item-preview {
+  cursor: pointer;
+  flex-basis: 100%;
+  img {
+    height:100%;
+    object-fit: cover;
+  }
+  .card-content {
+    padding: 0.8em;
+  }
+  @media(min-width: $mobile) {
+    flex-basis: 48%;
+    .card-image {
+      height: 150px;
+      background-color: #eceff1;
+    }
+  }
+  @media(min-width: $tablet) {
+    flex-basis: 32%;
+    .card-image {
+      height: 150px;
+    }
+  }
+  @media(min-width: $desktop) {
+    flex-basis: 32%;
+    .card-image {
+      height: 200px;
+    }
+  }
+  h5 {
+    margin-top:0;
+  }
+
+  transition: all 0.3s;
+  &:hover, &:active, &:focus {
+    transform: scale(1.03);
+  }
+
+  &.type-giveaway {
+    &:after {
+      content: "Bortskänkes!";
+      position: absolute;
+      background-color: $green;
+      color: white;
+      padding: 0.2em 0.5em;
+      top: 10px;
+      right: -5px;
+    }
+  }
+
+  .meta-preview {
+    span {
+      display: block;
+    }
+  }
+}
+
+.meta {
+  display: flex;
+  .image {
+    margin-right: 0.5em;
+  }
+  .text span {
+    display: block;
+  }
+}
+
+.itemStats {
+  margin: 3em 0 0 0;
+  background-color: $blue;
+  padding: 3em 0 2em 0;
+  @media(min-width: $tablet) {
+    margin: 4em 0 0 0;
+    padding: 4em 0 5em 0;
+  }
+
+  .container {
+    @media(min-width: $tablet) {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .stats-stats {
+    flex-basis: 48%;
+    h4 {
+      margin-top: 0;
+    }
+    p {
+      display: flex;
+      align-items: center;
+      i {
+        margin-right: 0.3em;
+      }
+    }
+  }
+
+  .stats-map {
+    height: 300px;
+    border: 1px solid $blue-dark;
+    flex-basis: 48%;
+  }
+}
+
+#map { height: 100%; }

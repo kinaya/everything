@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const requireLogin = require('../middlewares/requireLogin');
 const aws = require('aws-sdk');
 const Image = mongoose.model('images')
-
 aws.config.region = 'eu-north-1';
 
 module.exports = (app) => {
@@ -51,30 +50,30 @@ module.exports = (app) => {
     });
   })
 
-  app.post('/api/deleteImage', async (req, res, next) => {
+  app.delete('/api/image/:id', async (req, res, next) => {
     const s3Bucket = process.env.S3_BUCKET
     const s3 = new aws.S3();
 
-    const image = await Image.findOneAndDelete({_id: req.body.imageId});
-    // Delete from item?? image sätts till 'null' på item!
-
-    const s3Params = {
-      Bucket: s3Bucket,
-      Key: image.fileName
+    try {
+      const image = await Image.findOneAndDelete({_id: req.params.id});
+      const s3Params = {
+        Bucket: s3Bucket,
+        Key: image.fileName
+      }
+      s3.deleteObject(s3Params)
+      res.send();
+    } catch (err) {
+      next(err)
     }
 
-    s3.deleteObject(s3Params, (err, data) => {
+
+
+/*    s3.deleteObject(s3Params, (err, data) => {
       if(err) {
         next(err)
       }
-
-      // Respond with ok?
-      //console.log('date', data)
-      //res.write(JSON.stringify(data))
       res.send()
-      //res.end();
-
-    })
+    })*/
 
   })
 

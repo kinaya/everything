@@ -1,0 +1,15 @@
+.footer {
+  background-color: $green;
+  color: $white;
+  padding: 2em 0;
+  flex-shrink: 0;
+
+  a {
+    float: right;
+    color: $white;
+    margin-left: 1em;
+    &:hover, &:focus, &:active {
+      border-bottom: 1px solid $white;
+    }
+  }
+}
