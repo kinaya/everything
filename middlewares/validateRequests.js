@@ -6,7 +6,7 @@ const itemValidator = () => {
     check('body').not().isEmpty().trim().escape().withMessage('Body is required'),
     check('visibility').isBoolean().withMessage('Visibility can only be true or false'),
     check('type').not().isEmpty().trim().escape().withMessage('Type is required'),
-    check('type').isIn('lend','public','giveaway').withMessage('Not a valid item type'),
+    check('type').isIn(['lend','public','giveaway']).withMessage('Not a valid item type'),
     check('_image').optional().isMongoId().withMessage('Not a valid image id'),
     check('coordinates').optional().isArray().withMessage('Not an array with coordinates'),
     check('coordinates[*]').optional().isNumeric().withMessage('Not valid coordinates')
