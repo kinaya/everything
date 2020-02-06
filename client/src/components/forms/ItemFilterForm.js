@@ -2,7 +2,7 @@ import React from 'react';
 import {Field, reduxForm} from 'redux-form';
 import { TextField, Checkbox } from './ItemFormField';
 
-const ItemFilterForm = () => (
+const ItemFilterForm = ({sortByDistance}) => (
 
   <form className="itemFilterForm">
 
@@ -12,7 +12,11 @@ const ItemFilterForm = () => (
 
     <div className="filter">
       <Field className="order browser-default" name="order" component="select">
-        <option value="distance_asc">Närmast överst</option>
+
+        {sortByDistance && (
+          <option value="distance_asc">Närmast överst</option>
+        )}
+
         <option value="datePosted_desc">Nyaste överst</option>
         <option value="datePosted_asc">Äldsta överst</option>
         <option value="title_asc">Titel A-Ö</option>
@@ -32,5 +36,9 @@ const ItemFilterForm = () => (
 export default reduxForm({
   form: 'itemFilterForm',
   destroyOnUnmount: false,
-  initialValues: {order: 'distance_asc', display_lend: true, display_giveaway: true, display_public: true}
+  initialValues: {
+    //order: 'distance_asc',
+    display_lend: true,
+    display_giveaway: true,
+    display_public: true}
 })(ItemFilterForm);

@@ -16,6 +16,14 @@ class Item extends Component {
     this.props.clearRouteState()
   }
 
+  displayDistance = (item) => {
+    if(item.distance && item.distance !== false) { return (
+      <p><i className="material-icons">my_location</i> ca {item.distance} km bort</p>
+    )}
+    return null
+  }
+
+
   render() {
 
     const {item, user, deleteItem, history} = this.props;
@@ -83,13 +91,13 @@ class Item extends Component {
 
               <p><i className="material-icons">person</i><Link to={`/user/${item._user._id}`}>{item._user.name}</Link></p>
 
-              <p><i className="material-icons">my_location</i> ca {item.distance} km bort</p>
+              {this.displayDistance(item)}
 
             </div>
           </div>
         </div>
 
-        {!item.type === 'public' && !item._user._id !== user._id && (
+        {item.type !== 'public' && (item._user._id !== user._id) && (
           <div className="contactUserForm">
             <ContactUserForm name={item._user.name} title={item.title} />
           </div>

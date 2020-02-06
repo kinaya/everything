@@ -66,15 +66,6 @@ module.exports = (app) => {
       next(err)
     }
 
-
-
-/*    s3.deleteObject(s3Params, (err, data) => {
-      if(err) {
-        next(err)
-      }
-      res.send()
-    })*/
-
   })
 
 }

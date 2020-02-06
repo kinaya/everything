@@ -1,7 +1,8 @@
 import React from 'react';
 import Featured from './items/Featured'
+import { connect } from 'react-redux'
 
-const Landing = () => (
+const Landing = ({user}) => (
   <div className="landing">
     <div className="container container-large">
 
@@ -12,7 +13,9 @@ const Landing = () => (
         <p>Låna det du behöver, och låna ut sånt du själv inte använder så ofta.
         Bra för dig, miljön och världen ♥</p>
 
-        <a href="/auth/google" className="waves-effect waves-light btn orange darken-2">Logga in med Google</a>
+        {!user && (
+          <a href="/auth/google" className="waves-effect waves-light btn orange darken-2">Logga in med Google</a>
+        )}
 
       </div>
 
@@ -24,4 +27,7 @@ const Landing = () => (
   </div>
 )
 
-export default Landing;
+const mapStateToProps = (user) => (
+  {user}
+)
+export default connect(mapStateToProps)(Landing);
