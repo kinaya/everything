@@ -12,14 +12,12 @@ import Landing from './Landing';
 import Item from './items/Item';
 import User from './user/User';
 import Login from './user/Login';
-import PrivateRoute from './PrivateRoute';
 import RestrictedRoute from './RestrictedRoute';
 import ItemList from './items/ItemList';
 import ItemEdit from './items/ItemEdit';
 import ItemCreate from  './items/ItemCreate';
 import Loading from './Loading';
 import Users from './user/Users';
-import UserSettings from './user/UserSettings';
 import Faq from './Faq';
 import Contact from './Contact';
 import NotFound from './NotFound';
@@ -56,7 +54,6 @@ class App extends Component {
             <Route exact path="/user/login" component={Login} />
             <RestrictedRoute exact path="/users" component={Users} />
             <RestrictedRoute exact path="/user/:id" component={User} />
-            <PrivateRoute exact path="/user/:id/settings" component={UserSettings} />
             <RestrictedRoute exact path="/items" component={ItemList} />
             <RestrictedRoute exact path="/item/new" component={ItemCreate} />
             <RestrictedRoute exact path="/item/:id" component={Item} />

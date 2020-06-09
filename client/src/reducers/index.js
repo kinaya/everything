@@ -6,6 +6,7 @@ import profilesReducer from './profilesReducer';
 import routeStateReducer from './routeStateReducer';
 import featuredReducer from './featuredReducer';
 import positionReducer from './positionReducer';
+import tempImageReducer from  './tempImageReducer';
 import { reducer as reduxForm} from 'redux-form'
 
 export default combineReducers({
@@ -16,5 +17,6 @@ export default combineReducers({
   users: profilesReducer,
   routeState: routeStateReducer,
   featured: featuredReducer,
-  userCoordinates: positionReducer
+  userCoordinates: positionReducer,
+  tempImage: tempImageReducer
 });

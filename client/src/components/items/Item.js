@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom';
 import * as actions from '../../actions'
-import ContactUserForm from './../forms/ContactUserForm';
+import ContactForm from './../forms/ContactForm';
 import Loading from '../Loading';
 import Map from './Map';
 
@@ -28,6 +28,8 @@ class Item extends Component {
 
     const {item, user, deleteItem, history} = this.props;
 
+    console.log(item)
+
     if(!item) return ( <Loading /> )
 
     return (
@@ -47,7 +49,7 @@ class Item extends Component {
           </div>
 
           {item._image && (
-            <img className="image-large" src={item._image.url} alt="fkfnf" />
+            <img className="image-large" src={item._image.url} alt={`Bild på ${item.title}`} />
           )}
 
           <div className="body">
@@ -57,7 +59,7 @@ class Item extends Component {
           {item._user._id === user._id && (
             <div>
               <Link className="waves-effect waves-light btn-small" to={`/item/${item._id}/edit`}><i className="material-icons right">edit</i>Edit</Link>
-              <button style={{marginLeft: '1em'}} onClick={() => deleteItem(item._id, history)} className="deep-orange waves-effect waves-light btn-small"><i className="material-icons right">delete</i>Delete</button>
+              <button onClick={() => deleteItem(item._id, history)} className="deep-orange waves-effect waves-light btn-small"><i className="material-icons right">delete</i>Delete</button>
             </div>
           )}
 
@@ -67,7 +69,7 @@ class Item extends Component {
         <div className="itemStats">
           <div className="container">
 
-            {item.coordinates && item.coordinates.length !== 0 &&
+            {item.coordinates &&
               <div className="stats-map">
                 <Map item={item} />
               </div>
@@ -99,7 +101,7 @@ class Item extends Component {
 
         {item.type !== 'public' && (item._user._id !== user._id) && (
           <div className="contactUserForm">
-            <ContactUserForm name={item._user.name} title={item.title} />
+            <ContactForm name={item._user.name} title={item.title} />
           </div>
         )}
 

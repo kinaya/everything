@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import ItemPreview from './ItemPreview';
-import ItemFilterForm from './../forms/ItemFilterForm';
+import FilterForm from './../forms/FilterForm';
 import { connect } from 'react-redux';
 import  * as actions from '../../actions';
 import { filterAndSortItems } from '../../utils/sortObjects';
@@ -42,7 +42,7 @@ class ItemList extends Component {
 
     return (
       <div className="container container-large">
-        <ItemFilterForm sortByDistance={sortByDistance} />
+        <FilterForm sortByDistance={sortByDistance} />
         <div className="items">
           {this.displayResults(items, form, sortByDistance)}
         </div>

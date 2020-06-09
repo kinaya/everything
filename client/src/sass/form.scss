@@ -58,11 +58,18 @@
 }
 
 /* File upload */
-#file {
+
+#file,
+#_image_hidden {
   position: absolute;
   top: -10000px;
   left: -10000px;
 }
+/*#file {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+}*/
 .file-wrapper {
   width: 100%;
   height: 300px;

@@ -22,15 +22,9 @@ class ItemEdit extends Component {
 
     const { item } = this.props;
 
-    const initialValues = {
-      title: item.title,
-      body: item.body,
-      visibility: item.visibility,
-      coordinates: item.coordinates,
-      type: item.type
-    }
+    const initialValues = {...item};
     if(item._image) {
-      initialValues._image = item._image._id
+      initialValues._image = item._image._id;
     }
 
     if(!item) {

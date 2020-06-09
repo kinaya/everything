@@ -17,7 +17,7 @@ const ItemPreview = ({item, displayButtons, onDelete, history}) => {
 
         <div className="card-image">
           {item._image && (
-            <img alt="A thing" src={item._image.url} />
+            <img alt={`Bild på ${item.title}`} src={item._image.url} />
           )}
         </div>
 

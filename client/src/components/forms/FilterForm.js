@@ -1,8 +1,8 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { TextField, Checkbox } from './ItemFormField';
+import { TextField, Checkbox } from './FormFields';
 
-const ItemFilterForm = ({sortByDistance}) => (
+const FilterForm = ({sortByDistance}) => (
 
   <form className="itemFilterForm">
 
@@ -41,4 +41,4 @@ export default reduxForm({
     display_lend: true,
     display_giveaway: true,
     display_public: true}
-})(ItemFilterForm);
+})(FilterForm);

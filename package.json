@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": ">=11.10.2 <12.0.0",
-    "npm": "5.0.3"
+    "node": "12.16.1",
+    "npm": "6.13.4"
   },
   "scripts": {
     "start": "node index.js",
@@ -17,19 +17,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.610.0",
+    "@sendgrid/mail": "^7.1.1",
+    "aws-sdk": "^2.692.0",
     "body-parser": "^1.19.0",
-    "concurrently": "^5.0.2",
+    "concurrently": "^5.2.0",
     "cookie-session": "^1.4.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-validator": "^6.3.1",
+    "express-validator": "^6.5.0",
     "lodash": "^4.17.15",
-    "mongoose": "^5.8.7",
+    "mongoose": "^5.9.18",
     "multer": "^1.4.2",
-    "nodemon": "^2.0.2",
+    "node-sass": "^4.14.1",
+    "nodemon": "^2.0.4",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
-    "path-parser": "^2.0.2"
+    "path-parser": "^6.1.0",
+    "sendgrid": "^5.2.3"
   }
 }

@@ -79,7 +79,7 @@ module.exports = app => {
     const item = new Item({
       ...req.body,
       _user: req.user.id,
-      datePosted: Date.now(),
+      datePosted: Date.now()
     });
 
     await item.save(function (err, item) {
@@ -107,15 +107,15 @@ module.exports = app => {
   */
   app.put('/api/item/:id', requireLogin, requireOwnership, idValidator(), validateId, itemValidator(), validateInput, async (req, res) => {
 
-    const data = {
-      ...req.body,
-      _image: req.body._image ? req.body._image : null
-    }
+    const data = {...req.body}
+    const unset = {}
+    if(!req.body._image) { unset._image = 1 }
+    if(!req.body.coordinates) {unset.coordinates = 1}
 
     try {
       const item = await Item.findOneAndUpdate (
         {_id: req.params.id, _user: req.user._id},
-        {$set: data},
+        {$set: data, $unset: unset},
         {new: true, useFindAndModify: false}
       );
       res.send(item);

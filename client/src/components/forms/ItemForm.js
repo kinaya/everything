@@ -1,37 +1,22 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import { Link, withRouter } from 'react-router-dom';
-import { TextField, TextArea, FileUpload, Switch, Map, RadioButton } from './ItemFormField';
-import Loading from '../Loading';
+import { TextField, TextArea, Switch, RadioButton } from './FormFields';
+import FormImage from './FormImage';
+import FormMap from './FormMap';
 import { connect } from 'react-redux'
 import * as actions from  '../../actions'
 
 class ItemForm extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = { image: this.props.imageState, loading: false };
-  }
-
   onSubmit = (formValues) => {
     return this.props.onSubmit(formValues, this.props.history)
   }
 
-  addImage = async (formValues) => {
-    this.setState({loading: true})
-    const image = await this.props.createImage(formValues)
-    this.setState({image: image})
-    this.props.change('_image', image._id)
-    this.setState({loading: false})
-  }
-
-  removeImage = async () => {
-    const status = await this.props.deleteImage(this.state.image._id);
-    if(status === 200) {
-      this.props.change('_image', '')
-      this.props.change('file', '')
-      this.setState({image: false})
-    }
+  deleteImage = () => {
+    this.props.deleteImage(this.props.tempImage._id);
+    this.props.change('_image', '')
+    this.props.change('file', '') // Doesn't work!
   }
 
   render() {
@@ -49,27 +34,11 @@ class ItemForm extends Component {
           </div>
 
           <div className="image formField">
-            <Field type="hidden" name="_image" component="input" />
-            <Field type="file" name="file" id="file" onChange={this.addImage} component={FileUpload} />
-
-            <h6>Ladda upp en bild</h6>
-            <div className={`file-wrapper image-${!this.state.image ? 'false' : 'true'}`}>
-              {this.state.loading && ( <Loading /> )}
-
-              {this.state.image && !this.state.loading && (
-                <div className="file-preview-wrapper">
-                  <i onClick={this.removeImage} className="small material-icons">remove_circle</i>
-                  <img className="file-preview" src={this.state.image.url} alt="preview" />
-                </div>
-              )}
-
-              {!this.state.image && !this.state.loading && (
-                <label htmlFor="file"><i className="material-icons">image</i></label>
-              )}
-            </div>
+            <Field name="_image" id="_image_hidden" component="input" />
+            <Field name="file" type="file" deleteImage={this.deleteImage} tempImage={this.props.tempImage} component={FormImage} />
           </div>
 
-          <Field label="Plats" name="coordinates" component={Map} />
+          <Field label="Plats" name="coordinates" component={FormMap} />
 
           <Field label="Beskrivning" name="body" type="textarea" component={TextArea} />
 
@@ -90,6 +59,9 @@ class ItemForm extends Component {
   }
 }
 
+/*
+* Validate fields on submit
+*/
 function validate(values) {
   const errors = {};
 
@@ -104,10 +76,37 @@ function validate(values) {
   return errors;
 }
 
-const decoratedComponent = connect(null, actions)(ItemForm)
+/*
+* Async validate image field
+*/
+const asyncValidate = async (values, dispatch, props) => {
+
+  // Should this be done with promises?
+  // See: https://gist.github.com/sbalay/da6b33ab1cce49190f74d9ddd7a4c468
+
+  try {
+    const image = await dispatch(actions.createImage(values.file));
+    dispatch(props.change('_image', image._id))
+  } catch(e) {
+    console.log(e)
+    throw {file: 'File not supported'}
+  }
+
+}
+
+const mapStateToProps = ({tempImage}) => (
+  {tempImage}
+)
+
+const decoratedComponent = connect(mapStateToProps, actions)(ItemForm)
 
 export default reduxForm({
-  validate,
   form: 'itemForm',
+  validate,
+  asyncValidate,
+  asyncChangeFields: ['file'],
+  shouldAsyncValidate: (params) => {
+    return params.trigger === 'change' && params.syncValidationPasses; // do not async validate on submit
+  },
   initialValues: {visibility: true, type: 'lend'}
 })(withRouter(decoratedComponent))

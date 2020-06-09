@@ -1,12 +1,13 @@
 import React from 'react'
-import InputMap from './InputMap';
 
 // Textfield
 export const TextField = ({input, label, meta, ...rest}) => (
   <div className={`formField ${input.name}`}>
     <h6>{label}</h6>
     <input {...input} {...rest} />
-    <div className="error">{meta.touched && meta.error}</div>
+    {meta.touched && meta.error && (
+      <div className="error">{meta.error}</div>
+    )}
   </div>
 )
 
@@ -17,7 +18,9 @@ export const TextArea = ({input, label, meta, ...rest}) => (
       <h6>{label}</h6>
       <textarea id="textarea" {...input} {...rest} className="materialize-textarea" />
     </div>
-    <div className="error">{meta.touched && meta.error}</div>
+    {meta.touched && meta.error && (
+      <div className="error">{meta.error}</div>
+    )}
   </div>
 )
 
@@ -34,6 +37,9 @@ export const Switch = ({input, label, meta, ...rest}) => (
       <span className="lever"></span>
     </label>
     {input.value ? 'Visas för andra' : 'Visas inte för andra'}
+    {meta.touched && meta.error && (
+      <div className="error">{meta.error}</div>
+    )}
   </div>
 )
 
@@ -46,31 +52,3 @@ export const Checkbox = ({input, label, meta, ...rest}) => (
     </label>
   </div>
 )
-
-// Map
-export const Map = ({input, label, meta, ...rest}) => (
-  <div className={`formField ${input.name}`}>
-    <h6>{label}</h6>
-    <InputMap {...input} {...rest} />
-    <div className="red-text" style={{marginBottom: '20px'}}>{meta.touched && meta.error}</div>
-  </div>
-)
-
-// FileUpload
-const adaptFileEventToValue = delegate => e => delegate(e.target.files[0]);
-export const FileUpload = ({
-  input: { value: omitValue, onChange, onBlur, ...input },
-  meta: omitMeta,
-  ...props
-}) => (
-  <div className={`formField ${input.name}`}>
-    <input
-      name="file"
-      onChange={adaptFileEventToValue(onChange)}
-      onBlur={adaptFileEventToValue(onBlur)}
-      type="file"
-      {...props.input}
-      {...props}
-    />
-  </div>
-);

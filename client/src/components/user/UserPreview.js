@@ -7,7 +7,7 @@ const UserPreview = ({user}) => {
   return (
     <div className="card horizontal">
       <div className="card-image">
-        <img src={`${user.image}`} alt="profile" />
+        <img src={`${user.image}`} alt={user.name} />
       </div>
       <div className="card-stacked">
         <div className="card-content">

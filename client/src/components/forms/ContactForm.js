@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { TextArea } from './ItemFormField';
+import { TextArea } from './FormFields';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
 
-class ContactUserForm extends Component {
+class ContactForm extends Component {
 
   onSubmit = (formValues) => {
     this.props.sendRequest(this.props.item, formValues, this.props.user, this.props.item._user)
@@ -49,7 +49,7 @@ function validate(values) {
 const wrapped = reduxForm({
   validate,
   form: 'contactUserForm',
-})(ContactUserForm);
+})(ContactForm);
 
 function mapStateToProps(state) {
   return {

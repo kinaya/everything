@@ -6,27 +6,30 @@ export const addDistance = (items, coordinates) => {
   if(Array.isArray(items)) {
 
     items.forEach(item => {
-      const itemLat = item.coordinates[0]
-      const itemLng = item.coordinates[1]
-
-      if(itemLat && itemLng) {
-        const distance = getDistance(userLat, userLng, itemLat, itemLng)
-        item.distance = distance
-      } else {
-        item.distance = false
+      if(item.coordinates) {
+        const itemLat = item.coordinates[0]
+        const itemLng = item.coordinates[1]
+        if(itemLat && itemLng) {
+          const distance = getDistance(userLat, userLng, itemLat, itemLng)
+          item.distance = distance
+        } else {
+          item.distance = false
+        }
       }
     })
 
   } else {
 
-    const itemLat = items.coordinates[0]
-    const itemLng = items.coordinates[1]
+    if(items.coordinates) {
+      const itemLat = items.coordinates[0]
+      const itemLng = items.coordinates[1]
 
-    if(itemLat && itemLng) {
-      const distance = getDistance(userLat, userLng, itemLat, itemLng)
-      items.distance = distance
-    } else {
-      items.distance = false
+      if(itemLat && itemLng) {
+        const distance = getDistance(userLat, userLng, itemLat, itemLng)
+        items.distance = distance
+      } else {
+        items.distance = false
+      }      
     }
 
   }

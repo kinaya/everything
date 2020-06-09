@@ -1,18 +1,21 @@
 const passport = require('passport');
 const mongoose = require('mongoose')
 const requireLogin = require('../middlewares/requireLogin');
+const {imageValidator,validateImage} = require('../middlewares/validateRequests')
+
 const aws = require('aws-sdk');
 const Image = mongoose.model('images')
 aws.config.region = 'eu-north-1';
 
 module.exports = (app) => {
 
-  // This should be post???
-  app.get('/api/image/new', (req, res) => {
+  app.post('/api/image/new', requireLogin, imageValidator(), validateImage, (req, res) => {
     const s3Bucket = process.env.S3_BUCKET
     const s3 = new aws.S3();
-    const fileName = req.query['fileName'];
-    const fileType = req.query['fileType'];
+    const fileName = req.body.fileName;
+    const fileType = req.body.fileType;
+
+    console.log('image/new', req.body);
 
     const s3Params = {
       Bucket: s3Bucket,
@@ -50,7 +53,7 @@ module.exports = (app) => {
     });
   })
 
-  app.delete('/api/image/:id', async (req, res, next) => {
+  app.delete('/api/image/:id', requireLogin, async (req, res, next) => {
     const s3Bucket = process.env.S3_BUCKET
     const s3 = new aws.S3();
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {UPDATE_POSITION, CLEAR_ROUTE_STATE, FETCH_FEATURED_ITEMS, FETCH_USER, FETCH_ITEMS, FETCH_ITEM, UPDATE_LOADING, FETCH_USER_ITEMS, FETCH_PROFILE, FETCH_USERS } from './types';
+import {UPDATE_POSITION, TEMP_IMAGE, CLEAR_ROUTE_STATE, FETCH_FEATURED_ITEMS, FETCH_USER, FETCH_ITEMS, FETCH_ITEM, UPDATE_LOADING, FETCH_USER_ITEMS, FETCH_PROFILE, FETCH_USERS } from './types';
 import { toast } from 'react-toastify'
 import randomize from 'randomatic'
 import { addDistance } from '../utils/addDistance';
@@ -21,19 +21,25 @@ export const createImage = (file) => async dispatch => {
 
   try {
     // Get a signed request from server
-    const res = await axios.get(`/api/image/new?fileName=${fileNameRandom}&fileType=${file.type}`)
+    const res = await axios.post('/api/image/new', {fileName: fileNameRandom, fileType: file.type})
+    console.log(res)
     // Upload image to AWS S3
     await axios.put(res.data.signedRequest, file)
     // Return the image data
+    dispatch({type: TEMP_IMAGE, payload: res.data.image})
     return res.data.image;
-  } catch (e) { handleError(e) }
+  } catch (e) {
+    console.log('error', e)
+    handleError(e)
+  }
 }
 
 // Delete an image
 export const deleteImage = (id) => async dispatch => {
   try {
     const res = await axios.delete(`/api/image/${id}`)
-    return res.status;
+    // Check status...?
+    dispatch({type: TEMP_IMAGE, payload: false})
   } catch (e) { handleError(e) }
 }
 
@@ -75,18 +81,6 @@ export const deleteUser = (id) => async dispatch => {
 
 /* ====================== Items ====================== */
 
-// Create an item
-export const createItem = (formValues, history) => async dispatch => {
-  delete formValues.file; // Remove file field
-  if(formValues._image === '') {
-    delete formValues._image
-  }
-  try {
-    const res = await axios.post('/api/items', formValues);
-    history.push(`/item/${res.data._id}`);
-    toast.success(`${res.data.title} är nu uppladdad`,{position: toast.POSITION.TOP_CENTER});
-  } catch (e) { handleError(e) }
-}
 
 // Fetch featured items
 export const fetchFeatured = () => async (dispatch, getState) => {
@@ -136,12 +130,37 @@ export const fetchItem = id => async (dispatch, getState) => {
   } catch (e) { handleError(e) }
 }
 
-// Edit an item
-export const editItem = (itemId, formValues, history) => async dispatch => {
-  delete formValues.file; // Remove file field
-  if(formValues._image === '') {
+// Create an item
+export const createItem = (formValues, history) => async dispatch => {
+  console.log('createItem')
+  if(formValues._image === false) {
     delete formValues._image
   }
+  if(formValues.coordinates === false) {
+    delete formValues.coordinates
+  }
+  if(formValues.file) {
+    delete formValues.file
+  }
+
+
+  try {
+    const res = await axios.post('/api/items', formValues);
+    history.push(`/item/${res.data._id}`);
+    toast.success(`${res.data.title} är nu uppladdad`,{position: toast.POSITION.TOP_CENTER});
+  } catch (e) { handleError(e) }
+}
+
+// Edit an item
+export const editItem = (itemId, formValues, history) => async dispatch => {
+  console.log('editItem formValues', formValues)
+  if(formValues._image === false) {
+    delete formValues._image
+  }
+  if(formValues.coordinates === false) {
+    delete formValues.coordinates
+  }
+  console.log('editItem formValues that will be sent', formValues)
   try {
     const res = await axios.put(`/api/item/${itemId}`, formValues)
     history.push(`/item/${res.data._id}`);
@@ -162,11 +181,18 @@ export const deleteItem = (itemId, history) => async dispatch => {
 
 // Send a request
 export const sendRequest = (item, formValues, from, to) => async dispatch => {
-  console.log('A send request was made with the following data:')
-  console.log('item', item)
-  console.log('from', from)
-  console.log('to', to)
-  console.log('body', formValues.body)
+
+  const message = {
+    item,
+    body: formValues.body,
+    from,
+    to
+  }
+
+  try {
+    const res = await axios.post('/api/message', message);
+    // Dispatch something here!
+  } catch (e) { handleError(e)}
 }
 
 /* ====================== Route state ====================== */

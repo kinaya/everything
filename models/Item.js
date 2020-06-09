@@ -8,7 +8,7 @@ const itemSchema = new Schema({
   datePosted: Date,
   visibility: Boolean,
   _image: {type: Schema.Types.ObjectId, ref: 'images'},
-  coordinates: [Number],
+  coordinates: {type: [Number], default: undefined},
   type: String
 });
 

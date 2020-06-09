@@ -34,6 +34,7 @@ require('./routes/authRoutes')(app);
 require('./routes/userRoutes')(app);
 require('./routes/itemRoutes')(app);
 require('./routes/imageRoutes')(app);
+require('./routes/messageRoutes')(app);
 
 // Set up https and public folder for production
 if(process.env.NODE_ENV === 'production') {
